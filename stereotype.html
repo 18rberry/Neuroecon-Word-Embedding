@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../../../favicon.ico">
+
+    <title>Stereotype Game</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../../static/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="../../static/css/starter-template.css" rel="stylesheet">
+  </head>
+  <!-- background: url(https://i.ytimg.com/vi/AUtY0GPpGJw/maxresdefault.jpg) no-repeat; background-size: 100% 25%; box-shadow: 0px -1440px 30px 0px white inset;-->
+  <body style="background: url(https://images.pexels.com/photos/988872/pexels-photo-988872.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260) no-repeat; background-size: 100% 100%; box-shadow: 0px -930px 220px 0px white inset;">
+     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+          <img id="face" src="https://upload.wikimedia.org/wikipedia/commons/3/3e/Alan_Walker-_Logo.png" style="width:40px;height:40px; margin-left: 30px">
+          <li class="nav-item active" style="margin-left: 320px">
+            <a class="nav-link" href="http://127.0.0.1:8000/polls/#">Home <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item dropdown" style = "margin-left: 45px">
+            <a class="nav-link dropdown-toggle" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" style="color:white">Word Embeddings</a>
+            <ul class="dropdown-menu" aria-labelledby="dropdown01">
+              <a class="dropdown-item" href="http://127.0.0.1:8000/polls/reasoning#" >Similarity/Analogies</a>
+              <a class="dropdown-item" href="http://127.0.0.1:8000/polls/reasoningExtended">More</a>
+            </ul>
+          </li>
+          <li class="nav-item" style = "margin-left: 45px">
+            <a class="nav-link disabled" href="http://127.0.0.1:8000/polls/graph" style="color:white">PCA Graphs</a>
+          </li>
+          <li class="nav-item" style = "margin-left: 45px">
+            <a class="nav-link disabled" href="http://127.0.0.1:8000/polls/stereotype" style="color:white">Stereotype Game</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <main role="main" class="container">
+      <div class= "text-center">
+        <br>
+        <h4 style='margin-left: 0px; margin-bottom: 25px;font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif; font-size: 45px; color: rgb(34, 61, 118)'>Stereotype Game</h4>
+      </div>
+      <div class = "text-center">
+        <h5 style = "color: rgba(51, 182, 233); font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif;font-size: 20px; margin-top: 0px">Try and Estimate the Biases of Others.</h5>
+      </div>
+      <br>
+      <hr style="width: 300px">
+      <br>
+      <div class ="row">
+        <div class = "col-md-5">
+          <div class = "container bg-white" style="">
+            <canvas class="my-4" id="myChart" style="margin-left: -60px; width: 400px; height: 400px"></canvas>
+          </div>
+        </div>
+        <div class = "col-md-2" style="margin-top: -40px">
+          <br>
+          <p style="text-align: center; font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif;font-size: 14px;"> We surveyed 200 people <br>on the warmth and competence <br>of the following target: </p>
+          <h3 style="text-align: center" id ="person"> Lawyer </h3>
+          <br>
+          <p style="text-align: center; font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif;font-size: 14px;"> What is your prediction of the average rating from <br> a scale of -3.0 to 3.0: </p>
+          <br>
+          <h5 style = "font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif;font-size: 18px"> Warmth </h5>
+          <input type="text" class="form-control" name="input" placeholder="Estimate" id = "warmth" value = "" required>
+          <br>
+          <h5 style = "font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif;font-size: 18px"> Competence </h5>
+          <input type="text" class="form-control" name="input" placeholder="Estimate" id = "competence" value = "" required>
+          <br>
+          <button class="btn btn-danger btn-md" name="buttonGraph" type="button" onclick = "submit();" style="width: 160px;height: 40px">Submit Estimate</button>
+        </div>
+        <div class = "col-md-4" style="">
+          <div class = "row">
+            <canvas class="my-4 w-100" id="error2" width="450" height="230" style="margin-left:80px"></canvas>
+          </div>
+          <div class = "row">
+            <canvas class="my-4 w-100" id="error" width="450" height="230" style="margin-left:80px"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <footer class="pt-4 my-md-5 pt-md-5 border-top">
+        <div class="row">
+          <div class="col-12 col-md">
+            <img class="mb-2" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="24" height="24">
+            <small class="d-block mb-3 text-muted">&copy; 2018 || EZ</small>
+          </div>
+          <div class="col-6 col-md">
+            <h5>Additional Features</h5>
+            <ul class="list-unstyled text-small">
+              <li><a class="text-muted" href="#">Customize Graphs</a></li>
+          </div>
+          <div class="col-6 col-md">
+            <h5>Linked Resources</h5>
+            <ul class="list-unstyled text-small">
+              <li><a class="text-muted" href="https://research.shanghai.nyu.edu/centers-and-institutes/brain/events/predicting-unequal-treatment-role-social-perception-economic">Research Background</a></li>
+            </ul>
+          </div>
+          <div class="col-6 col-md">
+            <h5>About</h5>
+            <ul class="list-unstyled text-small">
+              <li><a class="text-muted" href="http://neuroecon.berkeley.edu/">Neureconomics Lab <br> UC Berkeley</a></li>
+
+            </ul>
+          </div>
+        </div>
+      </footer>
+      <br>
+
+    </main>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="../../../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script src="../../static/js/popper.min.js"></script>
+    <script src="../../static/js/bootstrap.min.js"></script>
+    <!-- Graphs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+    <script src="../../static/js/chartjs-plugin-datalabels.js"></script>
+    <script>
+      var mod= 2;
+
+      function addData(chart, label, data, type) {
+        type.data.labels.push(label);
+        type.data.datasets.forEach((dataset) => {
+          dataset.data.push(data);
+        });
+        type.update();
+      }
+      function addDataColor(chart, label, data, type) {
+        type.data.labels.push(label);
+        type.data.datasets.forEach((dataset) => {
+          dataset.data.push(data);
+        });
+        if(mod % 2 == 0) {
+          type.data.datasets[0].pointBackgroundColor[mod] = "rgba(51, 182, 233)"; 
+        }
+        else {
+          type.data.datasets[0].pointBackgroundColor[mod] = "";
+        }
+        mod++;
+        type.update();
+      }
+
+      function removeData(chart) {
+        scatterChart.data.labels.pop();
+        scatterChart.data.datasets.forEach((dataset) => {
+          dataset.data.pop();
+        });
+        scatterChart.update();
+      }
+
+      var q=0;
+      var totalDist = 0;
+      var averageDist = 0;
+
+      function submit() {
+        // Input Values 
+        var names = ["Lawyer", "Addict", "Inmate", "Surgeon", "Arab", "Accountant", "Jewish", "Athlete",
+        "Greek", "Japanese", "Spanish", "British", "Irish", "Nurse", "Farmer", "Parent", "Welfare",
+        "Disability", "Elderly", "Homeless"];
+        
+        var xvalues = [-1.63, -1.29, -2.59, 0.14, -1.05, -0.35, -0.04, -0.30, 0.45, 0.19, 0.48, 0.26,
+        0.39, 1.26, 0.81, 1.19, 0, 0.78, 1.3, 0];
+        
+        var yvalues = [1.43, -1.43, -0.87, 1.35, 0.35, 0.90, 0.75, 1.02, 0.12, 0.69, 0.10, 0.34, 0.18,
+        0.43, 0.26, -0.11, -1.26, -2.14, -0.55, -1.56];
+
+        // Taking in Inputs from User
+        var w = document.getElementById("warmth").value;
+        var c = document.getElementById("competence").value;
+        
+        // Clear Space for next input
+        document.getElementById("warmth").value = "";
+        document.getElementById("competence").value = "";
+        
+        // Check if input is within bounds
+        if (w > -3.0 && w < 3.0 && c > -3.0 && c < 3.0 && q < 20) {
+
+          // Calculating error and mean error 
+          var dist = Math.sqrt(Math.pow(xvalues[q]-w, 2) + Math.pow(yvalues[q]-c, 2));
+
+          totalDist += dist;
+          averageDist = totalDist/(q+1);
+
+          //add values to error charts
+          addData(error, '', {x: q, y: averageDist}, lineChart);
+          addData(error2, '', {x: q, y: dist}, lineError);
+
+          // remove previous data points
+          if(q != 0) { 
+            removeData(myChart);
+            removeData(myChart);
+          }
+          // Adding values to scatter chart
+          addDataColor(myChart, names[q]+" (Guess)",{x: w, y: c}, scatterChart);
+          addDataColor(myChart, names[q]+" (Mean)",{x: xvalues[q], y: yvalues[q]}, scatterChart);
+          
+          // Change category name displayed
+          document.getElementById("person").innerText = names[q+1];
+          
+          q++;
+
+          // check if there are twenty answers
+          if (q == 20) {
+            document.getElementById("person").innerText = "You're Done!";
+          }
+        }  
+        else {
+          document.getElementById("competence").value = "Invalid";
+          document.getElementById("warmth").value = "Invalid";
+        }
+      }
+    </script>
+    <script>
+      var ctx = document.getElementById("myChart");
+      var scatterChart = new Chart(ctx, {
+        type: 'scatter',
+        data: {
+          labels: ["EZ"],
+          datasets: [{
+            data: [
+              {x: -4 , y: -4},
+            ],
+            radius: 5,
+            backgroundColor: 'transparent',
+            borderColor: '#007bff',
+            borderWidth: 1,
+            pointBackgroundColor: []
+          }],
+        },
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                min: -3,
+                max: 3
+              },
+              gridLines: { 
+                zeroLineColor: '#ff6384',
+                lineWidth: 1
+              },
+              scaleLabel: {
+                display: true,
+                labelString: 'Competence',
+                fontSize: 15
+              }
+            }],
+            xAxes: [{
+              ticks: {
+                min: -3,
+                max: 3
+              },
+              gridLines: { 
+                zeroLineColor: '#ff6384',
+                lineWidth: 1          
+              },
+              scaleLabel: {
+                display: true,
+                labelString: 'Warmth',
+                fontSize: 15
+              }
+            }]
+          },
+          plugins: {
+            datalabels: {
+              formatter: function(value, context) {
+                return context.chart.data.labels[context.dataIndex];
+              },
+              align: 'top',
+              fontSize: 3
+            }
+          },
+          legend: {
+            display: false,
+          },
+          animation: {
+            duration: 2000,
+            easing: 'easeOutCirc' 
+          }
+        }
+      });
+    </script>
+    <script>
+      var some = document.getElementById("error");
+      var lineChart = new Chart(some, {
+        type: 'line',
+        data: {
+          datasets: [{
+            
+            fill: true,
+            backgroundColor: "rgba(66, 244, 238,0.4)",
+            borderColor: '#007bff',
+            borderWidth: 1,
+            pointBackgroundColor: '#007bff'
+          }],
+        },
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                min: 0,
+                max: 8
+              },
+              gridLines: { 
+                lineWidth: 1
+              },
+              scaleLabel: {
+                display: true,
+                labelString: 'Average Error',
+                fontSize: 15
+              }
+            }],
+            xAxes: [{
+              ticks: {
+
+              },
+              gridLines: { 
+                lineWidth: 1          
+              }
+            }]
+          },
+          plugins: {
+            datalabels: {
+              formatter: function(value, context) {
+                return context.chart.data.labels[context.dataIndex];
+              },
+              align: 'left',
+              fontSize: 3
+            }
+          },
+          legend: {
+            display: false,
+          },
+          animation: {
+            duration: 2000,
+            easing: 'easeOutCirc' 
+          }
+        }
+      });
+    </script>
+    <script>
+      var e = document.getElementById("error2");
+      var lineError = new Chart(e, {
+        type: 'line',
+        data: {
+          datasets: [{
+            
+            fill: true,
+            backgroundColor: "rgba(66, 244, 238,0.4)",
+            borderColor: '#007bff',
+            borderWidth: 1,
+            pointBackgroundColor: '#007bff'
+          }],
+        },
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                min: 0,
+                max: 8
+              },
+              gridLines: { 
+                lineWidth: 1
+              },
+              scaleLabel: {
+                display: true,
+                labelString: 'Error',
+                fontSize: 15
+              }
+            }],
+            xAxes: [{
+              ticks: {
+
+              },
+              gridLines: { 
+                lineWidth: 1          
+              }
+            }]
+          },
+          plugins: {
+            datalabels: {
+              formatter: function(value, context) {
+                return context.chart.data.labels[context.dataIndex];
+              },
+              align: 'left',
+              fontSize: 3
+            }
+          },
+          legend: {
+            display: false,
+          },
+          animation: {
+            duration: 2000,
+            easing: 'easeOutCirc' 
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

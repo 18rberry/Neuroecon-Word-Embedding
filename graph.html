@@ -1,0 +1,548 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../../../favicon.ico">
+
+    <title>PCA Graphs</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../../static/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="../../static/css/starter-template.css" rel="stylesheet">
+  </head>
+
+  <body>
+     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+          <img id="face" src="https://upload.wikimedia.org/wikipedia/commons/3/3e/Alan_Walker-_Logo.png" style="width:40px;height:40px; margin-left: 30px">
+          <li class="nav-item active" style="margin-left: 320px">
+            <a class="nav-link" href="http://127.0.0.1:8000/polls/#">Home <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item dropdown" style = "margin-left: 45px">
+            <a class="nav-link dropdown-toggle" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" style="color:white">Word Embeddings</a>
+            <ul class="dropdown-menu" aria-labelledby="dropdown01">
+              <a class="dropdown-item" href="http://127.0.0.1:8000/polls/reasoning#" >Similarity/Analogies</a>
+              <a class="dropdown-item" href="http://127.0.0.1:8000/polls/reasoningExtended">More</a>
+            </ul>
+          </li>
+          <li class="nav-item" style = "margin-left: 45px">
+            <a class="nav-link disabled" href="http://127.0.0.1:8000/polls/graph" style="color:white">PCA Graphs</a>
+          </li>
+          <li class="nav-item" style = "margin-left: 45px">
+            <a class="nav-link disabled" href="http://127.0.0.1:8000/polls/stereotype" style="color:white">Stereotype Game</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <br>
+    <main role="main" class="container">
+      <div class="text-center">
+        <h2 style='margin-top: 15px; font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif; font-size: 40px'>PCA Graph | Perceptual Maps</h2>
+        <br>
+        <h7 style="color: rgba(51, 182, 233); font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif;font-size: 20px">Pre-Loaded Examples</h7>
+        <br><br>
+        
+      </div>
+      <div class = "row">
+        <div class = "col-md-6">
+          <canvas class="my-4 w-100" id="myChart" width="550" height="500"></canvas>
+          <p style = "margin-left: 40px; margin-top: -30px; font-size: 10px">(Zoom and Drag with Mouse)</p>
+        </div>
+        <div class = "col-md-1">
+        </div>
+        <div class = "col-md-5">
+          <br>
+          <div class = "container bg-light">
+            <br>
+            <div class = "row">
+            <h5 style="margin-left: 15px;margin-bottom: 20px;font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif;font-size: 25px">Click An Example Below:</h5>
+            </div>
+            <div class = "row">
+              <div class = "col-md-4">
+                <button class="btn btn-dark btn-sm" name="buttonGraph" type="button" onclick = "carGoogle();" style="margin-left: 0px;margin-top: 15px; width: 180px">Cars | GN/W2V* (Default)</button>
+              </div>
+              <div style = "margin-left: 0px" class = "col-md-4">
+                <button class="btn btn-dark btn-sm" name="buttonGraph" type="button" onclick = "carTwitter();" style="margin-left: 40px; margin-top: 15px;width: 200px">Cars | Twitter/Glove</button>
+              </div>
+            </div>
+            <div class = "row"> 
+              <div class = "col-md-4">
+                <button class="btn btn-dark btn-sm" name="buttonGraph" type="button" onclick = "fastfood();" style="margin-top:25px; margin-left: 0px; width: 180px"> Fast Food | GN/W2V</button>
+              </div>
+              <div class = "col-md-4">
+                <button class="btn btn-dark btn-sm" name="buttonGraph" type="button" onclick = "music();" style="margin-left: 40px;margin-top: 25px; width: 200px"> Music Artists | Twitter/Glove</button>
+              </div>
+            </div>
+            <div class = "row">
+              <div class = "col-md-4">
+                <button class="btn btn-dark btn-sm" name="buttonGraph" type="button" onclick = "majors();" style="margin-left: 0px;margin-right: 0px; margin-top: 25px; width: 180px">College Majors | GN/W2V</button>
+              </div>
+              <div class = "col-md-4">
+                <button class="btn btn-dark btn-sm" name="buttonGraph" type="button" onclick = "candy();" style="margin-left: 40px;margin-right: 15px; margin-top: 25px; width: 200px"> Candies | Twitter/Glove</button>
+              </div>
+            </div>
+            <div class = "row"> 
+              <button class="btn btn-danger btn-sm" name="buttonGraph" type="button" onclick = "resetZoom();" style="margin-left: 15px;margin-right: 0px; margin-top: 35px"> Reset Zoom</button>
+              <h5 style="margin-left: 15px;margin-top: 45px;font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif;font-size: 15px">(Reset Before Changing Category)</h5>
+            </div>
+            <br>
+            <p style="font-size: 10px; margin-top: 20px"> *GN/W2V is Google News/Word2Vec &emsp;||&emsp; Point Labels are Slightly Modified for Clarity<br> Format is: "Category | 
+            Corpora Trained on / Model Used"</p>
+            <br>
+          </div>
+          <br>
+          <hr>
+        </div>
+      </div>
+
+      <div class = "row">
+        <div class="col-md-6">
+          <div class = "container bg-white" style="border-bottom-right-radius: 4.8px; border-bottom-left-radius: 4.8px; border-top-right-radius: 4.8px; border-top-left-radius: 4.8px; margin-left: -18px">
+            <h5 style="margin-bottom: 25px; margin-top: 30px; margin-left: 0px;font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif;font-size: 25px">Variance Accounted For</h5>
+            <div class = "row">
+              <div class = "col-md-6">
+                <h7>From First Component </h7>
+              </div>
+              <div class = "col-md-6">
+                <h7>From Second Component </h7>
+              </div>
+            </div>
+            <br>
+            <div class = "row">
+              <div class = "col-md-6">
+                  <div class="p-2 mb-3 bg-white text-primary border border-dark" id = "firstVar" style = "margin-left: 0px;border-bottom-right-radius: 4.8px; border-bottom-left-radius: 4.8px; border-top-right-radius: 4.8px; border-top-left-radius: 4.8px;width:190px">13.30%</div>
+              </div>
+              <div class = "col-md-6">
+                <div class="p-2 mb-3 bg-white text-primary border border-dark" id = "secVar" style = "margin-left: 0px;border-bottom-right-radius: 4.8px; border-bottom-left-radius: 4.8px; border-top-right-radius: 4.8px; border-top-left-radius: 4.8px;width:190px">9.526%</div>
+              </div>
+            </div>
+            <br>
+            <h7>Total Variance Accounted for By Graph</h7>
+              <div class="p-2 mb-3 bg-white text-primary border border-dark" id = "totalVar" style = "margin-top: 20px;border-bottom-right-radius: 4.8px; border-bottom-left-radius: 4.8px; border-top-right-radius: 4.8px; border-top-left-radius: 4.8px;width:190px">22.826%</div>
+          </div>
+          <hr style= "margin-top: 40px">
+          <h3 style ="margin-top: 35px;font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif;font-size: 35px">Concept</h3>
+          <br>
+          <p style="margin-top: 15px">
+              &emsp; Here, we are using word embeddings to create perceptual maps of categories of certain brands or people. By using Principal Component Analysis (PCA), we can reduce the 300-dimension or 200-dimension word vectors down into a 2 dimensional space that is more easily interpreted (plotted above using the first and second principal components). Clearly, however, since we are losing hundreds of dimensions of information, these graphs contain only a fraction of the variance of the original hundred-dimensional space. Above, we list the variance captured by the first principal component, the second principal component, and the summation of the two. 
+          </p>
+          <p>
+              &emsp; Moreover, as the label for the axes (which are the principal components) of the perceptual maps are unclear, we find a list of the adjectives that are closest to the principal components in the original word vector space in order to get a better idea of what the labels might be. These are listed to the right.  
+          </p>
+        </div>
+          
+        <div class="col-md-1" style = "margin-top: 0px">
+          <div class = "container bg-white" style="border-bottom-right-radius: 8px; border-bottom-left-radius: 8px; border-top-right-radius: 8px; border-top-left-radius: 8px; width: 490px; margin-left: 30px">
+            <br><br>
+            <h5 style= "margin-top: -15px; margin-left: 5px;font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif;font-size: 20px"> Descriptive Words for Each Principal Component</h5>
+            <br>
+            <h5 style = "margin-bottom: 5px;margin-left: 10px; margin-top: 0px">1st PC (X)</h5>  
+            <br>
+              <div class="p-1 mb-1 text-primary" id = "1P" style = "margin-left: -45px;border-bottom-right-radius: 4.8px; border-bottom-left-radius: 4.8px; border-top-right-radius: 4.8px; border-top-left-radius: 4.8px;width:190px; text-align: center">wealthy<br>famous<br>private<br>vintage<br>ultra<br>extraordinary<br>renowned<br>fancy<br>exclusive<br>romantic<br>royal<br>modern<br>iconic<br>mum<br>legendary<br>spare<br>fantastic<br>stunning<br>pure<br>sexy<br>exceptional<br>expensive<br>absolute<br>rich<br>excess<br>secret<br>delighted<br>worth<br>keen<br>super</div>
+            <br><br><br>
+          </div>
+        </div>
+        <div class="col mb-3" style = "margin-top: 0px">
+          <br><br>
+          <h5 style = "margin-left: 80px; margin-bottom: 5px; margin-top: 40px">2nd PC (Y)</h5>
+          <br>
+          <div class="p-1 mb-1 text-primary" id = "2P" style = "margin-left: 30px;border-bottom-right-radius: 4.8px; border-bottom-left-radius: 4.8px; border-top-right-radius: 4.8px; border-top-left-radius: 4.8px;width:190px; text-align: center">buyout<br>giant<br>toxic<br>hostile<br>viable<br>provincial<br>communist<br>risky<br>nuclear<br>federal<br>profitable<br>crude<br>collective<br>earliest<br>informal<br>fragile<br>bipartisan<br>small<br>congressional<br>regulatory<br>crucial<br>short<br>fair<br>long<br>critical<br>bilateral<br>premature<br>future<br>municipal<br>acquire</div>
+          <br>
+        </div>
+        <div class="col mb-3" style = "margin-top: 0px">
+          <br><br>
+          <h5 style = "margin-left: -40px; margin-bottom: 5px;margin-top: 40px">3rd PC</h5>
+          <br>
+          <div class="p-1 mb-1 text-primary" id = "3P" style = "margin-left: -100px;border-bottom-right-radius: 4.8px; border-bottom-left-radius: 4.8px; border-top-right-radius: 4.8px; border-top-left-radius: 4.8px;width:190px; text-align: center">uniform<br>tribal<br>worn<br>hooked<br>brown<br>traditional<br>distinct<br>backup<br>legitimate<br>sick<br>royal<br>yellow<br>orange<br>questionable<br>specialist<br>red<br>medical<br>supplement<br>finest<br>tired<br>regulated<br>favorite<br>substitute<br>fat<br>valuable<br>recommend<br>numerous<br>secondary<br>mad<br>extensive</div>
+          <br>
+        </div>
+        <div class="col mb-3" style = "margin-top: 0px">
+          <br><br>
+          <h5 style = "margin-left: -55px; margin-bottom: 5px;margin-top: 40px">4th PC</h5>
+          <br>
+          <div class="p-1 mb-1 text-primary" id = "4P" style = "margin-left: -115px;border-bottom-right-radius: 4.8px; border-bottom-left-radius: 4.8px; border-top-right-radius: 4.8px; border-top-left-radius: 4.8px;width:190px; text-align: center">general<br>electrical<br>regular<br>former<br>timely<br>genuine<br>ongoing<br>permanent<br>mechanical<br>disrupt<br>interim<br>recent<br>secondary<br>quiet<br>welcome<br>reliable<br>giant<br>technical<br>devastating<br>costly<br>disabled<br>legitimate<br>joint<br>vital<br>frequent<br>latest<br>thorough<br>their<br>temporary<br>skilled</div>
+          <br>
+        </div>
+      </div>
+      <footer class="pt-4 my-md-5 pt-md-5 border-top">
+        <div class="row">
+          <div class="col-12 col-md">
+            <img class="mb-2" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="24" height="24">
+            <small class="d-block mb-3 text-muted">&copy; 2018 || EZ</small>
+          </div>
+          <div class="col-6 col-md">
+            <h5>Additional Features</h5>
+            <ul class="list-unstyled text-small">
+              <li><a class="text-muted" href="#">Customize Graphs</a></li>
+          </div>
+          <div class="col-6 col-md">
+            <h5>Linked Resources</h5>
+            <ul class="list-unstyled text-small">
+              <li><a class="text-muted" href="http://www.segmentationstudyguide.com/understanding-perceptual-maps/perceptual-maps/">Explaining Perceptual Maps</a></li>
+              <li><a class="text-muted" href="http://www.stat.cmu.edu/~cshalizi/uADA/12/lectures/ch18.pdf">Explaining PCA</a></li>
+            </ul>
+          </div>
+          <div class="col-6 col-md">
+            <h5>About</h5>
+            <ul class="list-unstyled text-small">
+              <li><a class="text-muted" href="http://neuroecon.berkeley.edu/">Neureconomics Lab <br> UC Berkeley</a></li>
+
+            </ul>
+          </div>
+        </div>
+      </footer>
+
+    </main><!-- /.container -->
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="../../../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script src="../../static/js/popper.min.js"></script>
+    <script src="../../static/js/bootstrap.min.js"></script>
+    <!-- Graphs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
+    <script src="../../static/js/chartjs-plugin-datalabels.js"></script>
+    <script src="../../static/js/chartjs-plugin-zoom.js"></script>
+    <script src="../../static/js/chartjs-plugin-draggable.js"></script>
+    <script>
+      function resetZoom() {
+        window.scatterChart.resetZoom()
+      }
+      function addData(chart, label, data) {
+        scatterChart.data.labels.push(label);
+        scatterChart.data.datasets.forEach((dataset) => {
+          dataset.data.push(data);
+        });
+        scatterChart.update();
+      }
+
+      function removeData(chart) {
+        scatterChart.data.labels.pop();
+        scatterChart.data.datasets.forEach((dataset) => {
+          dataset.data.pop();
+        });
+        scatterChart.update();
+      }
+      function fastfood() {
+        x = 0;
+        while(x < 100) {
+          removeData(myChart);
+          x++;
+        }
+        var labels = ["McDonalds", "Burger King", "KFC","Subway","Taco Bell","Dairy Queen","Dunkin Donuts","Starbucks","Domino Pizza","Panera Bread","Arby","Chipotle","Pizza Hut","Chick-fil-a","Hardee","Popeyes","Whataburger","Quiznos","Zaxby","Steak-n-Shake","Qdoba","Panda Express","Del Taco","Krispy Kreme","Baskin Robbins"];
+
+        var xValues = [-1.1042898, -0.5712064, -0.28845784, -0.7593872, 0.048091207, -0.51660913, -1.0142229, -1.54874, 
+          -0.20078418, -0.6859127, 0.3725226, 0.059406217, -0.19539063, 1.596197, 0.5404424, 1.7007602, 1.5751078, 
+          -0.25055024, 1.5479112, 0.53930765, 0.42115593, -0.16558264, 0.4985705, -0.59155375, -1.0067858];
+
+        var yValues = [-1.1449772, -0.7878876, -0.9903602, -0.5866561, -0.05490373, -0.8467907, -0.091638744, 0.39623258,
+          -0.8786479, 0.7222203, -0.106821194, 1.295456, -0.7480334, -0.3510586, -0.9234674, 0.096716106, -0.19445725,
+          0.8389004, -0.78280646, 0.43765974, 1.4719462, 0.8919492, 1.0773624, 1.0169861, 0.2430761];
+
+        for(i=0; i < labels.length; i++) {
+          addData(myChart, labels[i],{x: xValues[i], y: yValues[i]});
+        }
+
+        document.getElementById("firstVar").innerText = "11.36%";
+        document.getElementById("secVar").innerText = "9.05%";
+        document.getElementById("totalVar").innerText = "20.41%";
+        document.getElementById("1P").innerText = 'pickup\nour\nhungry\nreliable\nlean\nathletic\nbackup\nfaithful\nproductive\nentertaining\noutstanding\nraw\ndynamic\nsolid\nstarter\nexceptional\neffective\nhealthy\ntotal\nvertical\nconservative\ninterior\nloyal\nanticipate\nrear\nexcellent\nclinical\nlakh\nconsistent\nwild';
+        document.getElementById("2P").innerText = "nonprofit\nimmigrant\nfiscal\nwireless\norganic\nuninsured\nethnic\ncurrent\nseasonal\nathletic\nintimate\ndean\ntribal\ncasual\nfinancial\nproprietary\ninstitutional\nour\nacre\nunique\nsolar\nexperimental\npartisan\nartistic\nincorporate\nincoming\neconomic\nanticipate\naffordable\nbipartisan";
+        document.getElementById("3P").innerText = "quarterly\nsecular\nfiscal\ninternal\noperational\ncrude\npersistent\nwestern\nhistorical\njudicial\ncorporate\nits\nrelative\neastern\nsecondary\ndue\nfinancial\nspite\nexternal\ncivil\npolitical\nsouthern\nweak\neconomic\ngross\nindependent\nvoluntary\nnet\ncold\nregulatory";
+        document.getElementById("4P").innerText = "nonprofit\nlongtime\nneutral\nwonderful\nfamiliar\nethical\nwarm\ncompatible\nopen\nplenty\nlovely\nprospective\nfair\nqualified\nfitting\nfaithful\ngrand\ncurious\npink\nbeautiful\nhistorical\nbirdie\nperfect\nsenior\nparticipant\nwelcome\nsweet\ncomfortable\nnice\ngenerous";
+      }
+      function carTwitter() {
+        x = 0;
+        while(x < 100) {
+          removeData(myChart);
+          x++;
+        }
+
+        var labels = ["Acura", "Audi", "Bentley", "Bmw", "Buick", "Cadillac","Chevrolet", "Chrysler", "Dodge", "Ferrari", "Fiat", "Ford", "GMC", "Honda", "Hyundai", "Infiniti", "Jaguar", "Jeep", "KIA", "Lamborghini", "Lexus", "Maserati", "Mazda", "Mercedes", "Nissan", "Porsche", "Rolls-Royce", "Subaru", "Tesla", "Toyota", 
+          "Volkswagen", "Volvo"];
+
+        var xValues = [1.4277729, -1.9036939, -1.4916731, -1.6212829, 3.4473636, 0.9953971, 1.8145581, 1.8386742, 
+          2.3784685, -2.8656635, -0.6513348, 0.35646433, 3.1016068, 0.59129745, 0.5647436, -0.30317864, -0.9661615,
+          0.8050199, 0.9573325, -2.3072455, 0.07806222, -1.34864, 0.4116608, -2.045454, -0.28708652, -1.8685315,
+          -0.5557044, 0.6577156, -0.39018682, 0.14212255, -0.72582495, -0.23659977];
+
+        var yValues = [1.070647, -0.38962024, 1.8774916, -0.99120903, 2.0565472, 2.0895164, -0.92738247, -0.79794866,
+          0.68223655, 0.0066847657, -0.8929236, -1.1152261, 1.1835507, -2.2561042, -1.0597856, 0.46496227, -0.010226096,
+          0.08649146, -1.1721959, 1.7904063, 0.2962379, 2.6737094, -1.064068, 0.1353423, -1.6341604, 0.40416542,
+          1.4165435, -0.40032196, -0.49106354, -2.1326082, -0.45983508, -0.4398557];
+
+        for(i=0; i < labels.length; i++) {
+          addData(myChart, labels[i],{x: xValues[i], y: yValues[i]});
+        }
+        
+        document.getElementById("firstVar").innerText = "12.31%"; 
+        document.getElementById("secVar").innerText = "8.224%"; 
+        document.getElementById("totalVar").innerText = "20.534%";
+        document.getElementById("1P").innerText = "عاد\nそうか\nأكثر\nmichigan\nなるほど\nこんにちは\nوين\nnhl\nembarrassing\nيلتزم\nnc\nقناة\nأعلم\nrough\nnمن\ndonate\nلأن\nقول\nالعرب\nريال\nsore\n［\nانت\nmedical\nالنساء\ndenver\nاكبر\nللتغريده\nمدري\nوما";
+        document.getElementById("2P").innerText = "وَ\nchainz\nالرحمن\nخلقه\nارزقني\nارحم\ndrake\nالجنة\nnaked\ntrippin\nالنار\nصدري\nbong\nhoop\nلها\nlawd\nhustle\nr.i.p\nاللہ\nيارب\nasleep\nسورة\nthang\nالعظيم\ntight\n✰\nbooty\nأعلم\ndormindo\nكثيراً";
+        document.getElementById("3P").innerText = "يمكن\nوكل\nقول\nسورة\nالرحمن\nصدق\nولآ\nقمة\nمدري\nشريك\nفولوباك\nчеловек\nقلب\nروحي\nاقول\nارحم\nmikir\nصباح\nthai\nikan\nnian\ngreater\nقلوب\npeka\nلهم\nмогу\nربك\nsetan\nاحنا\nيارب";
+        document.getElementById("4P").innerText = "ryan\nnick\ntom\npeter\ngiant\nfederal\npolitical\nmassive\ncriminal\nillegal\nbong\ncivil\nlegal\nbigger\nstewart\njohnny\nafraid\nwilliam\nلأن\nanonymous\nmajor\ncastle\nformer\nmiddle\nfoda\ntexas\nmcdonald\nforeign\nharry\nguilty";
+      }
+      function carGoogle() {
+        x = 0;
+        while(x < 100) {
+          removeData(myChart);
+          x++;
+        } 
+
+        var labels = ["Acura", "Aston_Martin", "Audi", "Bentley", "BMW", "Buick", "Cadillac","Chevrolet", "Chrysler", 
+        "Dodge", "Ferrari", "Fiat", "Ford", "GMC", "Honda", "Hyundai", "Infiniti", "Jaguar", "Jeep", "KIA", "Lamborghini",
+        "Lexus", "Maserati", "Mazda", "Mercedes_Benz", "Nissan", "Porsche", "Rolls_Royce", "Subaru", "Tesla", "Toyota", 
+        "Volkswagen", "Volvo"];
+
+        var xValues = [-0.7070878, 1.9227946, 0.67411065, 0.33882862, 0.46478337, -1.1014427, -0.4958454, -1.0670923, 
+          -0.39355105, -0.8741402, 1.6263882, 1.0783498, -0.39711177, -0.87203157, -0.49128622, -0.8431094, -0.37398753,
+          0.7089399, -1.0287528, -0.7702712, 1.3821076, -0.6299058, 1.2065988, -0.6155538, 0.110731125, -0.7158055,
+          1.0582266, 1.1992507, -0.54605955, 0.76305985, -0.76080364, 0.23083305, -0.08116377];
+
+        var yValues = [-1.2693479, -0.18025021, -0.5920541, 0.014533476, -0.5431077, 0.04515386, -0.044769567, -0.4312654,
+          2.169629, 0.053907234, -0.3870967, 2.15293, 0.7665528, 0.1989216, -0.30370918, 0.44010973, -0.8789565,
+          0.034912147, -0.28328422, 0.44229582, -0.7883846, -0.8442452, -0.7211793, -0.19063856, -0.5327829, 0.22249655,
+          -0.21930726, 0.040341206, -0.5668347, 0.9377769, 0.23893383, 0.7033141, 0.31540468];
+
+        for(i=0; i < labels.length; i++) {
+          addData(myChart, labels[i],{x: xValues[i], y: yValues[i]});
+        }
+        
+        document.getElementById("firstVar").innerText = "13.30%";
+        document.getElementById("secVar").innerText = "9.526%";
+        document.getElementById("totalVar").innerText = "22.826%";
+        document.getElementById("1P").innerText  = "wealthy\nfamous\nprivate\nvintage\nultra\nextraordinary\nrenowned\nfancy\nexclusive\nromantic\nroyal\nmodern\niconic\nmum\nlegendary\nspare\nfantastic\nstunning\npure\nsexy\nexceptional\nexpensive\nabsolute\nrich\nexcess\nsecret\ndelighted\nworth\nkeen\nsuper";
+        document.getElementById("2P").innerText = "buyout\ngiant\ntoxic\nhostile\nviable\nprovincial\ncommunist\nrisky\nnuclear\nfederal\nprofitable\ncrude\ncollective\nearliest\ninformal\nfragile\nbipartisan\nsmall\ncongressional\nregulatory\ncrucial\nshort\nfair\nlong\ncritical\nbilateral\npremature\nfuture\nmunicipal\nacquire";
+        document.getElementById("3P").innerText = "uniform\ntribal\nworn\nhooked\nbrown\ntraditional\ndistinct\nbackup\nlegitimate\nsick\nroyal\nyellow\norange\nquestionable\nspecialist\nred\nmedical\nsupplement\nfinest\ntired\nregulated\nfavorite\nsubstitute\nfat\nvaluable\nrecommend\nnumerous\nsecondary\nmad\nextensive";
+        document.getElementById("4P").innerText = "general\nelectrical\nregular\nformer\ntimely\ngenuine\nongoing\npermanent\nmechanical\ndisrupt\ninterim\nrecent\nsecondary\nquiet\nwelcome\nreliable\ngiant\ntechnical\ndevastating\ncostly\ndisabled\nlegitimate\njoint\nvital\nfrequent\nlatest\nthorough\ntheir\ntemporary\nskilled";
+      }
+
+      function candy() {
+        x = 0;
+        while(x < 100) {
+          removeData(myChart);
+          x++;
+        }   
+
+        var labels = ["Reeses", "Snickers", "Twix", "Kitkats", "Twizzlers", 
+              "Butterfingers", "Hersheys", "M&M", "Skittles", "Starbursts",
+              "Haribos", "Gushers", "Smarties", "Airheads", "Milkyways",
+              "Jellybeans", "Lifesavers", "Warheads", "Jolly Ranchers", "Lollipops",
+              "Frooties", "Taffy"];
+
+        var xValues = [2.2801337, 3.397263, 3.0700855, 0.008468798, -1.1018296, -0.09850468, 2.4154317, 2.5268073,
+          0.12803544, -2.4037893, -1.2702489, -2.398203, 0.4150689, -2.0784297, 1.6962181, -0.2415381, -1.9389688,
+          -1.3756, -1.6345057, 1.0623275, -2.5837576, 0.12553322];
+
+        var yValues = [1.6720984, 0.41283315, 1.251555, 0.09577734, 0.88171136, -0.42475253, -0.041631706,
+          0.4216802, 0.69501626, 1.3710238, 0.662242, 4.320521, 0.8011083, -1.363399, -0.24247275, -0.58070284,
+          -0.608764, -1.4830428, -2.2614293, -2.7522106, 0.4494076, -3.276569];
+
+        for(i=0; i < labels.length; i++) {
+          addData(myChart, labels[i],{x: xValues[i], y: yValues[i]});
+        }
+
+        document.getElementById("firstVar").innerText = "14.176%";
+        document.getElementById("secVar").innerText = "10.444%";
+        document.getElementById("totalVar").innerText = "24.62%";
+        document.getElementById("1P").innerText = "mcdonald\nbeso\nmini\nian\nc.\ntriple\npeter\ncoco\ncoklat\numm\nanniv\nfrench\ntal\no.\nese\ndark\ncama\npara\ncastle\ncomida\nnoel\nadek\nala\nali\nsexy\ndekat\nandy\nmid\nhappy\npat";
+        document.getElementById("2P").innerText = "للتغريده\nفولو\nblunt\nfollowngain\nbong\ngustan\nспать\nبدون\nмогу\nonun\nيقوم\nmarley\nدون\nوانا\nесть\ncomfortable\ncomida\nyoksa\nshoutout\nwatchin\nпросто\ncompro\nyounger\nkardashian\nhungry\nارزقني\njadinya\ncaminar\npenso\narrive'";
+        document.getElementById("3P").innerText = "orange\npink\npurple\nred\nyellow\nnasty\nwet\nfuck\nregular\ngreen\nblue\nbrown\ndrake\ngay\nswift\nkind\nlucky\nrocky\npiss\nwhore\nstuck\nwhatever\nblack\njimmy\nill\nvagina\nlovin\nmy\nblunt\ngiant";
+        document.getElementById("4P").innerText = "booty\nflappy\nbayar\nslick\nhiç\nbetta\nshyt\nhilarious\nlawd\neducación\nbible\nala\nolmak\nthang\nlmfaoo\nweak\ntouching\nembarrassing\nmusik\npandai\nwatchin\nhanya\nlowkey\npeter\npiss\nbukannya\nsehari\nibu\nyer\nhoward";
+      }
+      function music() {
+        x = 0;
+        while(x < 100) {
+          removeData(myChart);
+          x++;
+        }  
+
+        var labels = ["Beyonce","Rihanna", "Nicki Minaj", "Eminem", "Justin Timberlake", "Jayz", "Drake", "Kendrick Lamar", "Macklemore", "Justin Beiber", "Wiz Khalifa", "Kid Cudi", "Kanye", "Chris Brown", "Ed Sheeran", "Taylor Swift", "Coldplay", "Bruno Mars", "Zayn", "Aerosmith", "Avicii", "Adele","Bastille", "Lumineers", "Skrillex", "Selena Gomez", "Demi Lovato", "Lorde","Katy Perry", "Akon", "Zedd", "Timbaland", "Maroon 5", "Alesso", "The Weeknd", "Childish Gambino", "Ellie Goulding", "One Republic"];
+
+        var xValues = [2.016291, 2.5234513, 2.1174521, 0.571119, 1.1303185, -0.89346266, 1.0089182, -1.3075995, 0.05144794, 1.2842094, -0.68653727, -2.5365624, 0.37201297, -0.99494684, 1.7979553, 2.9758928, -0.21160017, 1.3835036, 
+          4.0746007, -1.1435302, -2.1752453, 1.6402328, -1.7425392, -1.9762518, -1.5470412, 4.4014473, 3.2648304, 
+          1.3011762, 2.2696586, -1.3633679, -2.3744247, -1.5902224, -0.26537383, -3.4777894, -2.6169682, -2.8823774,
+          -1.4174385, -2.981238];
+
+        var yValues = [1.4398754, 0.6863763, 1.7629974, 1.2042987, 0.3257567, 2.7895331, 3.2476728, 3.1072938, 0.65854067,0.82003284, 1.9237919, 2.3366716, 3.5998256, 1.3177761, -1.6936975, -0.9493292, -2.1853127, -1.133642, 
+          -0.89884067, -1.8704634, -1.8329513, -1.3201847, -2.1066713, -1.6644187, -0.9277876, -0.6999133, -1.4109089,
+          -0.9163912, -0.7651158, 0.5520307, -1.9918505, 0.833594, -1.7141902, -1.778324, 1.3325834, 2.1400604, -2.1270564, -2.0916622];
+
+        for(i=0; i < labels.length; i++) {
+          addData(myChart, labels[i],{x: xValues[i], y: yValues[i]});
+        }
+
+        document.getElementById("firstVar").innerText = "16.04%";
+        document.getElementById("secVar").innerText = "11.54%";
+        document.getElementById("totalVar").innerText = "27.58%";
+        document.getElementById("1P").innerText = "justin\nmiley\nharry\nkaty\nswift\nmegan\nnina\nsexy\nnick\nomg\nnormal\nstewart\nkardashian\nvagina\nsheeran\nhannah\ntumblr\ntipo\nfake\nporque\nfav\nsabe\nian\nflawless\nmundo\nfalou\nexiste\nteen\ntom\nsuper";
+        document.getElementById("2P").innerText = "chainz\ndrake\nbruh\ngucci\nchief\nrocky\nchildish\ndawg\nlmfaoo\nlowkey\nkardashian\nsayin\nshyt\ntrippin\njay\nslick\nbetta\nweak\nthang\nrich\nignorant\nwassup\nirrelevant\njoint\nnasty\nlame\nshoulda\nmane\ndumb\ngay";
+        document.getElementById("3P").innerText = "breakoutartist\nعندنا\nاحنا\nfaithful\nsorrynotsorry\ncutest\nدائما\nصباح\nكله\nقلوب\nتحب\nعندما\n❄\nkesehatan\nشريك\nromantic\nsweetest\nفيه\narrive\nagar\nlovely\nاجمل\nعلينا\nwonderful\nmblo\nblum\nبنات\nndak\nغرد_بصورة\nemotional";
+        document.getElementById("4P").innerText = "يعمل\nibu\nкредит\nfemaleartist\nｏｎｌｙ\nbreakoutartist\nеще\nphysical\nيقوم\nkardashian\nيعلم\nｆｏｌｌｏｗ\nsuami\ngagal\nالجميع\nنحن\nκαι\nbagaimana\nроссии\nего\nmikir\nفولوباك\nturkish\nحسن\nsorrynotsorry\nlütfen\npacarnya\nبالريتويت\nولآ\nlawd";
+      }
+      function majors() {
+        x = 0;
+        while(x < 100) {
+          removeData(myChart);
+          x++;
+        } 
+
+        var labels = ["Computer Science", "Electrical Engineering", "Mechanical Engineering", "Chemical Engineering", "Mathematics", "Economics", "Physics", "Chemistry", "Biology", "Psychology", "Philosophy", "Political Science", "Biochemistry", "Cognitive Science", "Sociology", "Religious Studies", "Linguistics", "Gender Studies",
+          "Comparative Literature", "Anthropology", "Africana Studies", "Fine Arts", "Criminology", "Biophysics", 
+          "Performing Arts", "Visual Arts"];
+
+        var xValues = [0.82076514, 1.6711029, 1.8071384, 1.5530581, 0.079056114, 0.07144773, 1.0078574, 0.98207814,
+          0.5548702, 0.25038993, -0.31710154, -0.28138128, 1.3077836, 0.029677106, -0.2972074, -1.1053838, -0.31146488,
+          -1.3178316, -0.7876859, -0.7780703, -1.5725634, -1.3152684, -0.021465523, 1.3989203, -1.8028631, -1.6258578];
+
+        var yValues = [0.10934885, 0.75650316, 0.5461928, 0.66143245, 0.3533337, -0.20963176, 0.47087392, 0.5824465, 
+          -0.3590276, -0.81696844, -0.40754056, -0.74589056, 0.025923433, -0.36162367, -1.007281, -0.81408316, -1.0400329,
+          -1.0481652, -0.66457474, -0.41578156, -0.78940374, 1.524456, -0.8874306, 0.12887107, 2.2966793, 2.1113756];
+
+        for(i=0; i < labels.length; i++) {
+          addData(myChart, labels[i],{x: xValues[i], y: yValues[i]});
+        }
+
+        document.getElementById("firstVar").innerText = "15.76%";
+        document.getElementById("secVar").innerText = "11.446%";
+        document.getElementById("totalVar").innerText = "27.206%";
+        document.getElementById("1P").innerText = "electrical\nmechanical\nbiological\ngenetic\ntechnological\nefficient\nindustrial\nuniform\nelectric\ncellular\nvertical\nproprietary\nscientific\nportable\nidentical\nautomotive\nelectronic\nadvanced\nclean\nmedical\nrevolutionary\nsolar\ndetect\nsuperior\nclinical\nrapid\nprotective\nsuper\nsafe\nreliable";
+        document.getElementById("2P").innerText = "innovative\nartistic\nindustrial\ncommercial\ncreative\nbright\nmusical\nexceptional\nspectacular\nvibrant\nthrilled\nlight\noutdoor\nsuitable\nautomotive\nhigh\ngreen\nsolar\ngrand\nsuperb\niconic\nproud\ngrateful\nperformer\nextraordinary\nliquid\ntalented\nmaximum\nexcited\nunveiled";
+        document.getElementById("3P").innerText = "electrical\nelectric\ndistinguished\nassociate\ncivil\nautomotive\ngraduate\nimmigrant\ndean\npursuant\nsolar\nethnic\nnative\ncivilian\ncoached\ninstrumental\nmemorial\nathletic\nelectoral\nstarter\ngovernmental\njudicial\ndiverse\ndemocratic\nrestart\nforeign\ninternal\nprogressive\nbackup\noversee";
+        document.getElementById("4P").innerText = "therapeutic\noral\nexperimental\nclinical\ncellular\nprotective\ngenetic\nscientific\npatient\nfluid\nbiological\nroutine\nnovel\ndental\nnatural\ndeadly\norganic\nrare\nmysterious\ngeneric\npivotal\nmulti\nexcited\nliquid\ncollaborative\ntoxic\noriginal\njoint\nfrustrating\nproprietary";
+      }
+    </script>
+    <script>
+      var ctx = document.getElementById("myChart");
+      var scatterChart = new Chart(ctx, {
+        type: 'scatter',
+        data: {
+          labels: ["Acura", "Aston Martin", "Audi", "Bentley", "BMW", "Buick", "Cadillac",
+              "Chevrolet", "Chrysler", "Dodge", "Ferrari", "Ford", 
+              "GMC", "Honda", "Hyundai", "Infiniti", "Jaguar", "Jeep", 
+              "KIA", "Lamborghini", "Lexus", "Maserati", "Mazda", "Mercedes Benz",
+              "Nissan", "Porsche", "Rolls Royce", "Subaru", "Tesla", "Toyota", 
+              "Volkswagen", "Volvo"],
+          datasets: [{
+            data: [
+              {x: -0.7070878 , y: -1.2693479 },
+              {x: 1.9227946 , y: -0.18025021 },
+              {x: 0.67411065 , y: -0.5920541 },
+              {x: 0.33882862 , y: 0.014533476 },
+              {x: 0.46478337 , y: -0.5431077 },
+              {x: -1.1014427 , y: 0.04515386 },
+              {x: -0.4958454 , y: -0.044769567 },
+              {x: -1.0670923 , y: -0.4312654 },
+              {x: -0.39355105 , y: 2.169629 },
+              {x: -0.8741402 , y: 0.053907234 },
+              {x: 1.6263882 , y: -0.3870967 },
+              {x: -0.39711177 , y: 0.7665528 },
+              {x: -0.87203157 , y: 0.1989216 },
+              {x: -0.49128622 , y: -0.30370918 },
+              {x: -0.8431094 , y: 0.44010973 },
+              {x: -0.37398753 , y: -0.8789565 },
+              {x: 0.7089399 , y: 0.034912147 },
+              {x: -1.0287528 , y: -0.28328422 },
+              {x: -0.7702712 , y: 0.44229582 },
+              {x: 1.3821076 , y: -0.7883846 },
+              {x: -0.6299058 , y: -0.8442452 },
+              {x: 1.2065988 , y: -0.7211793 },
+              {x: -0.6155538 , y: -0.19063856 },
+              {x: 0.110731125 , y: -0.5327829 },
+              {x: -0.7158055 , y: 0.22249655 },
+              {x: 1.0582266 , y: -0.21930726 },
+              {x: 1.1992507 , y: 0.040341206 },
+              {x: -0.54605955 , y: -0.5668347 },
+              {x: 0.76305985 , y: 0.9377769 },
+              {x: -0.76080364 , y: 0.23893383 },
+              {x: 0.23083305 , y: 0.7033141 },
+              {x: -0.08116377 , y: 0.31540468 }
+            ],
+            backgroundColor: 'transparent',
+            borderColor: '#007bff',
+            borderWidth: 1,
+            pointBackgroundColor: '#007bff'
+          }],
+        },
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                display: false
+              },
+              gridLines: { 
+                zeroLineColor: '#ff6384',
+                lineWidth: 1
+              },
+              scaleLabel: {
+                display: true,
+                labelString: '',
+                fontSize: 15
+              }
+            }],
+            xAxes: [{
+              ticks: {
+                display: false
+              },
+              gridLines: { 
+                zeroLineColor: '#ff6384',
+                lineWidth: 1          
+              },
+              scaleLabel: {
+                display: true,
+                labelString: '',
+                fontSize: 15
+              }
+            }]
+          },
+          plugins: {
+            datalabels: {
+              formatter: function(value, context) {
+                return context.chart.data.labels[context.dataIndex];
+              },
+              align: 'right',
+              fontSize: 3
+            }
+          },
+          zoom: {
+              // Boolean to enable zooming
+              enabled: true,
+              mode: 'xy',
+              rangeMin: {
+                // Format of min zoom range depends on scale type
+                x: -4,
+                y: -4
+              },
+              rangeMax: {
+                // Format of max zoom range depends on scale type
+                x: 5.5,
+                y: 4
+              }
+          },
+          pan: {
+              // Boolean to enable panning
+              enabled: true,
+              mode: 'xy'
+          },
+          legend: {
+            display: false,
+          },
+          animation: {
+            duration: 3000,
+            easing: 'easeOutCirc' 
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
