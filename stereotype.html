@@ -10,40 +10,30 @@
     <title>Stereotype Game</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="../../static/css/rangesliderSmall.css" rel ="stylesheet">
+    <link href="../../static/css/rangesliderThin.css" rel ="stylesheet">
     <link href="../../static/css/bootstrap.css" rel="stylesheet">
 
     <link href="../../static/css/starter-template.css" rel="stylesheet">
   </head>
   <!-- background: url(https://images.pexels.com/photos/988872/pexels-photo-988872.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260) no-repeat; background-size: 100% 100%; box-shadow: 0px -930px 220px 0px white inset;-->
-  <body style="background: url(https://images.wallpaperscraft.com/image/flower_background_light_line_paint_28083_1920x1080.jpg) no-repeat; background-size: 100% 100%; box-shadow: 0px -980px 220px 0px white inset;" onload="firstValue();">
-     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+  <!-- url(https://images.wallpaperscraft.com/image/flower_background_light_line_paint_28083_1920x1080.jpg) no-repeat; background-size: 100% 100%; box-shadow: 0px -950px 220px 0px white inset;-->
+  <body style="background: url(https://newevolutiondesigns.com/images/freebies/black-white-background-3.jpg) no-repeat; background-size: 100% 100%; box-shadow: 0px -970px 220px 0px white inset;" onload="firstValue();">
+     <nav class="navbar-xs navbar-expand-md navbar-dark fixed-top" style = "background-color: rgb(50,50,50)">
       <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
           <img id="face" src="https://cdn.pixabay.com/photo/2015/09/22/15/26/brain-951874_1280.png" style="width:50px;height:40px;">
-          <a class="navbar-brand" style="color:rgb(192, 236, 236); margin-left: 10px">Stereotypes</a>
-          <li class="nav-item active">
-            <a class="nav-link" href="http://127.0.0.1:8000/polls/stereotype" style = "margin-left: 35px">Warmth and Competence<span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item dropdown" style = "margin-left: 15px">
-            <a class="nav-link dropdown-toggle" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" style="color:white">Names</a>
-            <ul class="dropdown-menu" aria-labelledby="dropdown01">
-              <a class="dropdown-item" href="http://127.0.0.1:8000/polls/reasoning#" >Easy</a>
-              <a class="dropdown-item" href="http://127.0.0.1:8000/polls/reasoningExtended">Hard</a>
-            </ul>
+          <a class="navbar-brand" style="color: rgba(51, 182, 233); margin-left: 10px; font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif; font-size: 18px">Neuroeconomics</a>
         </ul>
       </div>
     </nav>
-
+    <br>
     <main role="main" class="container">
-      <div class= "text-center">
-        <br>
-        <h4 style='margin-left: 0px; margin-bottom: 25px;font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif; font-size: 45px; color: rgb(34, 61, 118)'>Warmth and Competence</h4>
+      <div class= "text-center" style="">
+        <h4 style='margin-left: 0px; margin-bottom: 25px;font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif; font-size: 38px; color: rgb(34, 61, 118)'>Estimate the Biases of Others.</h4>
       </div>
       <div class = "text-center">
-        <h5 style = "color: rgba(51, 182, 233); font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif;font-size: 20px; margin-top: 0px">Try and Estimate the Biases of Others.</h5>
+        <h5 style = "color: rgba(51, 182, 233); font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif;font-size: 20px; margin-bottom: 30px">People are good at making judgments about <br>others based on very little information. </h5>
       </div>
-      <br>
       <hr style="width: 300px">
       <br>
       <div class ="row">
@@ -54,25 +44,40 @@
         </div>
         <div class = "col-md-2" style="margin-top: -40px">
           <br>
-          <p style="text-align: center; font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif;font-size: 13px;"> We surveyed a large group of US respondents on the warmth and competence of the following target: </p>
+          <div class = "row">
+            <p style="text-align: center; font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif;font-size: 13px;"> We surveyed a large group of US respondents to predict the <span style="color:red">warmth </span> and <span style="color:red">competence </span> of the following target: 
+              <button style = "width: 28px; height: 28px; margin-left: 5px; border-bottom-right-radius: 20px; border-bottom-left-radius: 0px; border-top-right-radius: 20px; border-top-left-radius: 20px; margin-top: -3px"type="button" class="btn-sm btn-secondary" data-toggle="tooltip" data-placement="right" title="The target could be a person's name, a person's occupation, or a person from a certain state. When you see the information below, try to imagine someone who fits that description.">
+              ?
+              </button>
+            </p>
+          </div>
           <h3 style="text-align: center; margin-bottom: 20px" id ="person"></h3>
-          <p style="text-align: center; font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif;font-size: 13px;"> What is your prediction of the average rating from <br> a scale of 0 to 100: </p>
+          <p style="text-align: center; font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif;font-size: 13px;"> What is your estimate of the <span style="color:red">average </span> rating of the <span style="color:red">warmth</span> and <span style="color:red">competence</span> of the target above on scale of 0 to 100: </p>
           <br>
-          <h5 style = "font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif;font-size: 18px"> Warmth </h5>
-          
+          <div class = "row" style = "margin-bottom: 5px; margin-left: 0px">
+            <h5 style = "font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif;font-size: 18px"> Warmth </h5>
+            <button style = "width: 30px; height: 30px; margin-left: 67px; border-bottom-right-radius: 30px; border-bottom-left-radius: 0px; border-top-right-radius: 30px; border-top-left-radius: 30px;"type="button" class="btn-sm btn-secondary" data-toggle="tooltip" data-placement="right" title="In your opinion, how *warm* is this person? That is, how much does this person tend to be friendly, be caring, and have good intentions toward others?">
+              ?
+            </button>
+          </div>
           <div class="rangeslider-wrap">
             <input type="range" min="0" max="100" step="1" labels="" id="warmth">
           </div>
             
           <br>
-          <h5 style = "font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif;font-size: 18px"> Competence </h5>
+          <div class = "row" style = "margin-bottom: 5px; margin-left: 0px">
+            <h5 style = "font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif;font-size: 18px;"> Competence </h5>
+            <button style = "width: 30px; height: 30px; margin-left: 25px; border-bottom-right-radius: 20px; border-bottom-left-radius: 0px; border-top-right-radius: 20px; border-top-left-radius: 20px;"type="button" class="btn-sm btn-secondary" data-toggle="tooltip" data-placement="right" title="In your opinion, how *competent* is this person? That is, how much does this person tend to be intelligent, effective, and capable of carrying out his or her intentions?">
+              ?
+            </button>
+          </div>
           
           <div class="rangeslider-wrap">
             <input type="range" min="0" max="100" step="1" labels="" id="competence">
           </div>
           
           <br>
-          <button class="btn btn-danger btn-md" name="buttonGraph" type="button" onclick = "submit();" style="width: 160px;height: 40px">Submit Estimate</button>
+          <button class="btn btn-danger btn-md" name="buttonGraph" type="button" onclick = "submit();" style="width: 160px;height: 40px; margin-top: 10px">Submit Estimate</button>
         </div>
         <div class = "col-md-4" style="margin-top: -30px">
           <div class = "row">
@@ -100,9 +105,9 @@
             <small class="d-block mb-3 text-muted">&copy; EZ</small>
           </div>
           <div class="col-6 col-md">
-            <h5>Additional Features</h5>
+            <h5>Additional Works</h5>
             <ul class="list-unstyled text-small">
-              <li><a class="text-muted" href="#">Names</a></li>
+              <li><a class="text-muted" href="">Word Embeddings</a></li>
           </div>
           <div class="col-6 col-md">
             <h5>Linked Resources</h5>
@@ -130,10 +135,13 @@
     <script>window.jQuery || document.write('<script src="../../../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
     <script src="../../static/js/popper.min.js"></script>
     <script src="../../static/js/bootstrap.min.js"></script>
-    <!-- Graphs -->
+    <!-- Chart tools -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
     <script src="../../static/js/chartjs-plugin-datalabels.js"></script>
+    <!-- Slider code -->
     <script src="../../static/js/rangeslider.min.js"></script>
+
+    <!-- More Slider code-->
     <script>
       $('input[type="range"]').rangeslider({
 
@@ -169,6 +177,12 @@
       });
 
     </script>
+    <script>
+      $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+      })
+    </script>
+    <!-- dynamic parts of website-->
     <script>
       var mod= 2;
 
@@ -212,18 +226,22 @@
         "Marie", "Michelle", "Nicholas", "Omar", "Randall", "Ruben", "Sara", "Sarah", "Tamara", "William", 
         "Anthropologist", "Astrologer", "Athletic Trainer", "Biochemist", "Chauffeur", "Chef", "Computer Programmer",
         "Dancer", "Diplomat", "Forensic scientist", "Lifeguard", "Musician", "Phlebotomist", "Piano Tuner", "Producer",
-        "Solicitor", "Stock Broker", "Welder", "Wigmaker", "Zoologist", "from Alaska", "from Colorado", "from Indiana", 
-        "from Kansas", "from Kentucky", "from Louisiana", "from Maryland", "from Michigan", "from Minnesota", 
-        "from Missouri", "from Montana", "from Nevada", "from New Mexico", "from North Dakota", "from Ohio", 
-        "from Oregon", "from Tennessee", "from Washington", "from Wisconsin", "from Wyoming", "Brandon", "Chase",
+        "Solicitor", "Stock Broker", "Welder", "Wigmaker", "Zoologist", "Person from Alaska", "Person from Colorado", 
+        "Person from Indiana", "Person from Kansas", "Person from Kentucky", "Person from Louisiana", 
+        "Person from Maryland", "Person from Michigan", "Person from Minnesota", "Person from Missouri", 
+        "Person from Montana", "Person from Nevada", "Person from New Mexico", "Person from North Dakota", 
+        "Person from Ohio", "Person from Oregon", "Person from Tennessee", "Person from Washington", 
+        "Person from Wisconsin", "Person from Wyoming", "Brandon", "Chase",
         "Christopher", "Claudia", "David", "Debra", "Harry", "Heather", "Javier", "Jennifer", "Jermaine", "Latasha",
         "Louis", "Mario", "Miguel", "Monica", "Nancy", "Ryan", "Tyler", "Victoria", "Astronaut", "Auctioneer", 
         "Bookbinder", "Cartographer", "Coffee roaster", "Dermatologist", "Detective", "Guard", "Inspector", 
         "Mathematician", "Meat packer", "Midwife", "Neuroscientist", "Pediatrician", "Psychologist", "Sociologist",
-        "Songwriter", "Taxi Driver", "Tutor", "Veterinarian", "from Arizona", "from Arkansas", "from Connecticut", 
-        "from Delaware", "from Florida", "from Hawaii", "from Idaho", "from Illinois", "from Maine", 
-        "from Massachusetts", "from Nebraska", "from New Hampshire", "from North Carolina","from Oklahoma", 
-        "from Pennsylvania", "from Texas", "from Utah", "from Vermont", "from Virginia", "from West Virginia"]; 
+        "Songwriter", "Taxi Driver", "Tutor", "Veterinarian", "Person from Arizona", "Person from Arkansas", 
+        "Person from Connecticut", "Person from Delaware", "Person from Florida", "Person from Hawaii", 
+        "Person from Idaho", "Person from Illinois", "Person from Maine", "Person from Massachusetts", 
+        "Person from Nebraska", "Person from New Hampshire", "Person from North Carolina","Person from Oklahoma", 
+        "Person from Pennsylvania", "Person from Texas", "Person from Utah", "Person from Vermont", 
+        "Person from Virginia", "Person from West Virginia"]; 
 
       var xvalues = [54.08, 69.95238095, 56.33333333, 52.27272727, 70.04166667, 58.68181818, 50.42857143, 57.35714286,
         63.7826087, 55.93103448, 66.07692308, 64.13043478, 57.04761905, 41.875, 49.30434783, 54.92, 65.86363636,
@@ -263,11 +281,7 @@
         // Taking in Inputs from User
         var w = document.getElementById("warmth").value;
         var c = document.getElementById("competence").value;
-        
-        // Clear Space for next input
-        document.getElementById("warmth").value = "";
-        document.getElementById("competence").value = "";
-        
+                
         // Check if input is within bounds
         if (w >= 0 && w <= 100 && c >= 0 && c <= 100 && q < 20) {
 
@@ -313,8 +327,7 @@
           }
         }  
         else {
-          document.getElementById("competence").value = "Invalid";
-          document.getElementById("warmth").value = "Invalid";
+          // do nothing
         }
       }
     </script>
@@ -347,6 +360,7 @@
                 lineWidth: 1
               },
               scaleLabel: {
+                fontColor: 'black',
                 display: true,
                 labelString: 'Competence',
                 fontSize: 15
@@ -362,6 +376,7 @@
                 lineWidth: 1          
               },
               scaleLabel: {
+                fontColor: 'black',
                 display: true,
                 labelString: 'Warmth',
                 fontSize: 15
@@ -395,7 +410,7 @@
           datasets: [{
             
             fill: true,
-            backgroundColor: "rgba(66, 244, 238,0.4)",
+            backgroundColor: "rgb(34, 61, 118, 0.4)",
             borderColor: '#007bff',
             borderWidth: 1,
             pointBackgroundColor: '#007bff'
@@ -453,7 +468,7 @@
           datasets: [{
             
             fill: true,
-            backgroundColor: "rgba(66, 244, 238,0.4)",
+            backgroundColor: "rgba(51, 182, 233, 0.4)",
             borderColor: '#007bff',
             borderWidth: 1,
             pointBackgroundColor: '#007bff'
@@ -467,7 +482,7 @@
                 max: 100
               },
               gridLines: { 
-                lineWidth: 1
+                lineWidth: 1,
               },
               scaleLabel: {
                 display: true,
