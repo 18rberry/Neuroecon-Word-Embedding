@@ -1,0 +1,538 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../../../favicon.ico">
+
+    <title>Stereotype Game</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../../static/css/rangesliderThin.css" rel ="stylesheet">
+    <link href="../../static/css/bootstrap.css" rel="stylesheet">
+
+    <link href="../../static/css/starter-template.css" rel="stylesheet">
+  </head>
+  
+  <body style="background: url(https://newevolutiondesigns.com/images/freebies/black-white-background-3.jpg) no-repeat; background-size: 100% 100%; box-shadow: 0px -1000px 220px 0px white inset;" onload="firstValue();">
+     <nav class="navbar-xs navbar-expand-md navbar-dark fixed-top" style = "background-color: rgb(50,50,50)">
+      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+          <img id="face" src="https://cdn.pixabay.com/photo/2015/09/22/15/26/brain-951874_1280.png" style="width:50px;height:40px;">
+          <a class="navbar-brand" style="color: rgba(51, 182, 233); margin-left: 10px; font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif; font-size: 18px">Neuroeconomics</a>
+        </ul>
+      </div>
+    </nav>
+    <br>
+    <main role="main" class="container">
+      <div class= "text-center" style="">
+        <h4 style='margin-left: 0px; margin-bottom: 25px;font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif; font-size: 38px; color: rgb(34, 61, 118)'>Estimate the Biases of Others.</h4>
+      </div>
+      <div class = "text-center">
+        <h5 style = "color: rgba(51, 182, 233); font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif;font-size: 20px; margin-bottom: 30px">People are good at making judgments about <br>others based on very little information. </h5>
+      </div>
+      <hr style="width: 300px">
+      <br>
+      <div class ="row">
+        <div class = "col-md-5">
+          <div class = "container" style="">
+            <canvas class="my-4" id="myChart" style="margin-left: -60px; width: 400px; height: 400px"></canvas>
+          </div>
+        </div>
+        <div class = "col-md-2" style="margin-top: -40px">
+          <br>
+          <div class = "row">
+            <p style="text-align: center; font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif;font-size: 13px;"> We surveyed a large group of US respondents to judge the <span style="color:red">warmth </span> and <span style="color:red">competence </span> of the following target: 
+              <button style = "width: 28px; height: 28px; margin-left: 5px; border-bottom-right-radius: 20px; border-bottom-left-radius: 0px; border-top-right-radius: 20px; border-top-left-radius: 20px; margin-top: -3px"type="button" class="btn-sm btn-secondary" data-toggle="tooltip" data-placement="right" title="The target could be a person's name, a person's occupation, or a person from a certain state. When you see the information below, try to imagine someone who fits that description.">
+              ?
+              </button>
+            </p>
+          </div>
+          <h3 style="text-align: center; margin-bottom: 20px" id ="person"></h3>
+          <p style="text-align: center; font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif;font-size: 13px;"> What is your estimate of the <span style="color:red">average </span> rating of the <span style="color:red">warmth</span> and <span style="color:red">competence</span> of the target above on scale of 0 to 100: </p>
+          <br>
+          <div class = "row" style = "margin-bottom: 5px; margin-left: 0px">
+            <h5 style = "font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif;font-size: 18px"> Warmth </h5>
+            <button style = "width: 30px; height: 30px; margin-left: 67px; border-bottom-right-radius: 30px; border-bottom-left-radius: 0px; border-top-right-radius: 30px; border-top-left-radius: 30px;"type="button" class="btn-sm btn-secondary" data-toggle="tooltip" data-placement="right" title="In your opinion, how *warm* is this person? That is, how much does this person tend to be friendly, be caring, and have good intentions toward others?">
+              ?
+            </button>
+          </div>
+          <div class="rangeslider-wrap">
+            <input type="range" min="0" max="100" step="1" labels="" id="warmth">
+          </div>
+            
+          <br>
+          <div class = "row" style = "margin-bottom: 5px; margin-left: 0px">
+            <h5 style = "font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif;font-size: 18px;"> Competence </h5>
+            <button style = "width: 30px; height: 30px; margin-left: 25px; border-bottom-right-radius: 20px; border-bottom-left-radius: 0px; border-top-right-radius: 20px; border-top-left-radius: 20px;"type="button" class="btn-sm btn-secondary" data-toggle="tooltip" data-placement="right" title="In your opinion, how *competent* is this person? That is, how much does this person tend to be intelligent, effective, and capable of carrying out his or her intentions?">
+              ?
+            </button>
+          </div>
+          
+          <div class="rangeslider-wrap">
+            <input type="range" min="0" max="100" step="1" labels="" id="competence">
+          </div>
+          
+          <br>
+          <button class="btn btn-danger btn-md" name="buttonGraph" type="button" onclick = "submit();" style="width: 160px;height: 40px; margin-top: 10px">Submit Estimate</button>
+        </div>
+        <div class = "col-md-4" style="margin-top: -30px">
+          <div class = "row">
+            <canvas class="my-4 w-100" id="error2" width="450" height="230" style="margin-left:80px"></canvas>
+          </div>
+          <hr style="margin-left: 100px; margin-top: -20px">
+          <div class = "row">
+            <p style = "font-weight: 700; font-family: Museo-Sans,Helvetica,Arial,sans-serif;font-size: 13px; margin-left:120px; color: rgb(34, 61, 118);"> Warmth Rating was Off By:</p>
+            <p style = "font-weight: 500; font-family: Museo-Sans,Helvetica,Arial,sans-serif;font-size: 13px; margin-left:10px" id = "warmthError">0</p>
+          </div>
+          <div class = "row">
+            <p style = "font-weight: 700; font-family: Museo-Sans,Helvetica,Arial,sans-serif;font-size: 13px; margin-left:120px; color: rgb(34, 61, 118);"> Competence Rating was Off By:</p>
+            <p style = "font-weight: 500; font-family: Museo-Sans,Helvetica,Arial,sans-serif;font-size: 13px; margin-left:10px" id = "competenceError">0</p>
+          </div>
+          <hr style="margin-left: 100px; margin-top: 3px;">
+          <div class = "row" style = "margin-top: -10px">
+            <canvas class="my-4 w-100" id="error" width="450" height="230" style="margin-left:80px"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <footer class="pt-4 my-md-5 pt-md-5 border-top">
+        <div class="row">
+          <div class= "col-3">
+            <small class="d-block mb-3 text-muted">&copy; EZ</small>
+          </div>
+          <div class="col-6 col-md">
+            <h5>Additional Works</h5>
+            <ul class="list-unstyled text-small">
+              <li><a class="text-muted" href="">Word Embeddings</a></li>
+          </div>
+          <div class="col-6 col-md">
+            <h5>Linked Resources</h5>
+            <ul class="list-unstyled text-small">
+              <li><a class="text-muted" href="https://research.shanghai.nyu.edu/centers-and-institutes/brain/events/predicting-unequal-treatment-role-social-perception-economic">Research Background</a></li>
+            </ul>
+          </div>
+          <div class="col-6 col-md">
+            <h5>About</h5>
+            <ul class="list-unstyled text-small">
+              <li><a class="text-muted" href="http://neuroecon.berkeley.edu/">Neureconomics Lab <br> UC Berkeley</a></li>
+
+            </ul>
+          </div>
+        </div>
+      </footer>
+      <br>
+
+    </main>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="../../../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script src="../../static/js/popper.min.js"></script>
+    <script src="../../static/js/bootstrap.min.js"></script>
+    <!-- Chart tools -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+    <script src="../../static/js/chartjs-plugin-datalabels.js"></script>
+    <!-- Slider code -->
+    <script src="../../static/js/rangeslider.min.js"></script>
+
+    <!-- More Slider code-->
+    <script>
+      $('input[type="range"]').rangeslider({
+
+      polyfill: false,
+
+      // Callback function
+      onInit: function() {
+        $rangeEl = this.$range;
+        // add value label to handle
+        var $handle = $rangeEl.find('.rangeslider__handle');
+        var handleValue = '<div class="rangeslider__handle__value">' + "\xa0"+ this.value + '</div>';
+        $handle.append(handleValue);
+        
+        // get range index labels 
+        var rangeLabels = this.$element.attr('labels');
+        rangeLabels = rangeLabels.split(', ');
+        
+        // add labels
+        $rangeEl.append('<div class="rangeslider__labels"></div>');
+        $(rangeLabels).each(function(index, value) {
+          $rangeEl.find('.rangeslider__labels').append('<span class="rangeslider__labels__label">' + value + '</span>');
+        })
+      },
+
+      // Callback function
+      onSlide: function(position, value) {
+        var $handle = this.$range.find('.rangeslider__handle__value');
+        $handle.text("\xa0" + this.value);
+      },
+
+      // Callback function
+      onSlideEnd: function(position, value) {}
+      });
+
+    </script>
+
+    <!-- tool tip -->
+    <script>
+      $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+      })
+    </script>
+
+    <!-- chart points (adding, removal) , error, and target selection-->
+    <script>
+      var mod= 2;
+
+      function addData(chart, label, data, type) {
+        type.data.labels.push(label);
+        type.data.datasets.forEach((dataset) => {
+          dataset.data.push(data);
+        });
+        type.update();
+      }
+      function addDataColor(chart, label, data, type) {
+        type.data.labels.push(label);
+        type.data.datasets.forEach((dataset) => {
+          dataset.data.push(data);
+        });
+        if(mod % 2 == 0) {
+          type.data.datasets[0].pointBackgroundColor[mod] = "rgba(51, 182, 233)"; 
+        }
+        else {
+          type.data.datasets[0].pointBackgroundColor[mod] = "";
+        }
+        mod++;
+        type.update();
+      }
+
+      function removeData(chart) {
+        scatterChart.data.labels.pop();
+        scatterChart.data.datasets.forEach((dataset) => {
+          dataset.data.pop();
+        });
+        scatterChart.update();
+      }
+
+
+
+       // Data gathered from study
+      var names = ["Angelica", "Ashley", "Benjamin", "Craig", "Elizabeth", "Eric", "Frank", "Keith", "Lindsey", "Luis", 
+        "Marie", "Michelle", "Nicholas", "Omar", "Randall", "Ruben", "Sara", "Sarah", "Tamara", "William", 
+        "Anthropologist", "Astrologer", "Athletic Trainer", "Biochemist", "Chauffeur", "Chef", "Computer Programmer",
+        "Dancer", "Diplomat", "Forensic scientist", "Lifeguard", "Musician", "Phlebotomist", "Piano Tuner", "Producer",
+        "Solicitor", "Stock Broker", "Welder", "Wigmaker", "Zoologist", "Person from Alaska", "Person from Colorado", 
+        "Person from Indiana", "Person from Kansas", "Person from Kentucky", "Person from Louisiana", 
+        "Person from Maryland", "Person from Michigan", "Person from Minnesota", "Person from Missouri", 
+        "Person from Montana", "Person from Nevada", "Person from New Mexico", "Person from North Dakota", 
+        "Person from Ohio", "Person from Oregon", "Person from Tennessee", "Person from Washington", 
+        "Person from Wisconsin", "Person from Wyoming", "Brandon", "Chase",
+        "Christopher", "Claudia", "David", "Debra", "Harry", "Heather", "Javier", "Jennifer", "Jermaine", "Latasha",
+        "Louis", "Mario", "Miguel", "Monica", "Nancy", "Ryan", "Tyler", "Victoria", "Astronaut", "Auctioneer", 
+        "Bookbinder", "Cartographer", "Coffee roaster", "Dermatologist", "Detective", "Guard", "Inspector", 
+        "Mathematician", "Meat packer", "Midwife", "Neuroscientist", "Pediatrician", "Psychologist", "Sociologist",
+        "Songwriter", "Taxi Driver", "Tutor", "Veterinarian", "Person from Arizona", "Person from Arkansas", 
+        "Person from Connecticut", "Person from Delaware", "Person from Florida", "Person from Hawaii", 
+        "Person from Idaho", "Person from Illinois", "Person from Maine", "Person from Massachusetts", 
+        "Person from Nebraska", "Person from New Hampshire", "Person from North Carolina","Person from Oklahoma", 
+        "Person from Pennsylvania", "Person from Texas", "Person from Utah", "Person from Vermont", 
+        "Person from Virginia", "Person from West Virginia"]; 
+
+      var xvalues = [54.08, 69.95238095, 56.33333333, 52.27272727, 70.04166667, 58.68181818, 50.42857143, 57.35714286,
+        63.7826087, 55.93103448, 66.07692308, 64.13043478, 57.04761905, 41.875, 49.30434783, 54.92, 65.86363636,
+        66.39130435, 50.80769231, 56.85714286, 64.39285714, 60.5, 57.90909091, 47.69565217, 70.22727273, 65.20833333,
+        44.60714286, 65.16, 63.78947368, 49.62068966, 70.76, 71.85, 59.77777778, 65.47826087, 52.04347826, 38.56521739,
+        41.67857143, 47.93333333, 63.375, 77.15, 59.53571429, 66.16129032, 58.42857143, 52.875, 58.27586207, 67.44827586,
+        60, 58.69230769, 61.11111111, 57.73913043, 59.72727273, 58.32142857, 54.28571429, 57.95238095, 58.76, 56.34782609,
+        65.62068966, 62.19230769, 60.33333333, 62.3, 50.88888889, 51.0952381, 61.91666667, 54.125, 62, 53.05263158,
+        63.41666667, 62.29411765, 50.20833333, 63.375, 52.48275862, 55.33333333, 61, 63.57692308, 52.38709677, 
+        60.51612903, 59.19230769, 53.66666667, 57.66666667, 55.95454545, 59.42307692, 41.66666667, 45.66666667, 
+        58.14285714, 64.15384615, 60.6, 35.72727273, 35, 40.55555556, 39.28571429, 37.95238095, 78.125, 45.92, 
+        78.85185185, 63.17241379, 64.90909091, 62.03571429, 37.39393939, 70.81818182, 74.96, 52.6, 54.95833333, 
+        54.34782609, 57.83333333, 54.41935484, 73.69230769, 59, 53.64, 49.95, 42.75, 51.56, 55.6, 55.2962963, 
+        52.54545455, 56.81818182, 59.65384615, 54.51851852, 60.57142857, 62.84615385, 54.83333333];
+        
+      var yvalues = [60, 64.45454545, 58.62962963, 61.47368421, 69.4, 61.95652174, 59.09090909, 66.75, 60.72, 49.86363636,
+        70.63636364, 60.31818182, 56.83333333, 51.2, 54.36, 55.54545455, 56.83333333, 66.125, 45.93103448, 72.15384615, 
+        80.85714286, 62.2173913, 69.48275862, 81.26315789, 66, 68.68965517, 79.84615385, 60.52941176, 76.04545455,
+        75.59259259, 70.13333333, 54.8, 72.31578947, 69.23529412, 75.33333333, 52.73913043, 70.83333333, 69.88461538,
+        61.26923077, 73.48275862, 61.42857143, 67.38095238, 55.58333333, 53.54166667, 56.76, 45.94736842, 67.19230769,
+        65.16, 62.65714286, 55.91666667, 62.05263158, 57.63157895, 57.73076923, 59.03846154, 58.92, 61.65384615,
+        54.15789474, 72.33333333, 58.66666667, 56.04166667, 56.3, 51.74193548, 72.11538462, 67.24137931, 69.10714286,
+        63.88461538, 68.22727273, 66, 49.83333333, 65.34615385, 52.17241379, 49.53846154, 63.55555556, 54.95238095,
+        51.16666667, 63.55555556, 60.31578947, 67.55555556, 54.13636364, 68.35714286, 87.35294118, 57.67741935, 
+        57.20833333, 76.20833333, 52.86956522, 75.125, 74.40625, 49.36842105, 64.69565217, 78.46428571, 48.2, 
+        65.17391304, 82.41666667, 83.76, 62.91304348, 63.74074074, 56.75, 43.35, 67.38709677, 76.85185185, 51.86956522, 
+        41.15625, 70.625, 67.26086957, 45.46666667, 61.08333333, 54.11538462, 62.27272727, 67.11538462, 77.2, 
+        51.95454545, 78.5, 54.24137931, 43, 68.64285714, 49.4137931, 57.92, 72.54545455, 55.41666667, 48.32];
+      
+      var q=0;
+      var totalDist = 0;
+      var averageDist = 0;
+      var random;
+      var inputWarmth = [];
+      var inputCompetence = [];
+      var inputTarget = [];
+
+      function firstValue() {
+        random = Math.floor(Math.random() * 120); 
+        document.getElementById("person").innerText = names[random];
+      }
+
+      function submit() {
+
+        // Taking in Inputs from User
+        var w = document.getElementById("warmth").value;
+        var c = document.getElementById("competence").value;
+                
+        // Check if input is within bounds
+        if (w >= 0 && w <= 100 && c >= 0 && c <= 100 && q < 20) {
+
+          //collecting user data for submission into database
+          inputWarmth.push(w);
+          inputCompetence.push(c);
+          inputTarget.push(names[random]);
+
+          document.getElementById("warmthError").innerText = Math.round((xvalues[random]-w)*10)/10;
+          document.getElementById("competenceError").innerText = Math.round((yvalues[random]-c)*10)/10;
+          // Calculating error and mean error 
+          var dist = Math.sqrt(Math.pow(xvalues[random]-w, 2) + Math.pow(yvalues[random]-c, 2));
+
+          totalDist += dist;
+          averageDist = totalDist/(q+1);
+
+          //add values to error charts
+          addData(error, '', {x: q, y: averageDist}, lineChart);
+          addData(error2, '', {x: q, y: dist}, lineError);
+
+          // remove previous data points
+          if(q != 0) { 
+            removeData(myChart);
+            removeData(myChart);
+          }
+          // Adding values to scatter chart
+          addDataColor(myChart, names[random]+" (Guess)",{x: w, y: c}, scatterChart);
+          addDataColor(myChart, names[random]+" (Mean)",{x: xvalues[random], y: yvalues[random]}, scatterChart);
+
+          //gets rid of point so no values are repeated
+          names.splice(random, 1);
+          xvalues.splice(random, 1);
+          yvalues.splice(random, 1);
+
+          q++;
+
+          //generates random number for a random pick
+          random = Math.floor(Math.random() * (120-q)); 
+
+          // Change category name displayed
+          document.getElementById("person").innerText = names[random];
+          
+          
+
+          // check if there are twenty answers
+          if (q == 20) {
+            document.getElementById("person").innerText = "You're Done!";
+
+            //TODO: submit data input and average mean error
+
+          }
+        }  
+        else {
+          // do nothing
+        }
+      }
+    </script>
+    <!-- charts -->
+    <script>
+      var ctx = document.getElementById("myChart");
+      var scatterChart = new Chart(ctx, {
+        type: 'scatter',
+        data: {
+          labels: ["EZ"],
+          datasets: [{
+            data: [
+              {x: 30 , y: -400},
+            ],
+            radius: 5,
+            backgroundColor: 'transparent',
+            borderColor: '#007bff',
+            borderWidth: 1,
+            pointBackgroundColor: []
+          }],
+        },
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                min: 0,
+                max: 100
+              },
+              gridLines: { 
+                zeroLineColor: '#ff6384',
+                lineWidth: 1
+              },
+              scaleLabel: {
+                fontColor: 'black',
+                display: true,
+                labelString: 'Competence',
+                fontSize: 15
+              }
+            }],
+            xAxes: [{
+              ticks: {
+                min: 0,
+                max: 100
+              },
+              gridLines: { 
+                zeroLineColor: '#ff6384',
+                lineWidth: 1          
+              },
+              scaleLabel: {
+                fontColor: 'black',
+                display: true,
+                labelString: 'Warmth',
+                fontSize: 15
+              }
+            }]
+          },
+          plugins: {
+            datalabels: {
+              formatter: function(value, context) {
+                return context.chart.data.labels[context.dataIndex];
+              },
+              align: 'top',
+              fontSize: 3
+            }
+          },
+          legend: {
+            display: false,
+          },
+          animation: {
+            duration: 2000,
+            easing: 'easeOutCirc' 
+          }
+        }
+      });
+    </script>
+    <script>
+      var some = document.getElementById("error");
+      var lineChart = new Chart(some, {
+        type: 'line',
+        data: {
+          datasets: [{
+            
+            fill: true,
+            backgroundColor: "rgb(34, 61, 118, 0.4)",
+            borderColor: '#007bff',
+            borderWidth: 1,
+            pointBackgroundColor: '#007bff'
+          }],
+        },
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                min: 0,
+                max: 100
+              },
+              gridLines: { 
+                lineWidth: 1
+              },
+              scaleLabel: {
+                display: true,
+                labelString: 'Mean Error',
+                fontSize: 15
+              }
+            }],
+            xAxes: [{
+              ticks: {
+
+              },
+              gridLines: { 
+                lineWidth: 1          
+              }
+            }]
+          },
+          plugins: {
+            datalabels: {
+              formatter: function(value, context) {
+                return context.chart.data.labels[context.dataIndex];
+              },
+              align: 'left',
+              fontSize: 3
+            }
+          },
+          legend: {
+            display: false,
+          },
+          animation: {
+            duration: 2000,
+            easing: 'easeOutCirc' 
+          }
+        }
+      });
+    </script>
+    <script>
+      var e = document.getElementById("error2");
+      var lineError = new Chart(e, {
+        type: 'line',
+        data: {
+          datasets: [{
+            
+            fill: true,
+            backgroundColor: "rgba(51, 182, 233, 0.4)",
+            borderColor: '#007bff',
+            borderWidth: 1,
+            pointBackgroundColor: '#007bff'
+          }],
+        },
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                min: 0,
+                max: 100
+              },
+              gridLines: { 
+                lineWidth: 1,
+              },
+              scaleLabel: {
+                display: true,
+                labelString: 'Error',
+                fontSize: 15
+              }
+            }],
+            xAxes: [{
+              ticks: {
+
+              },
+              gridLines: { 
+                lineWidth: 1          
+              }
+            }]
+          },
+          plugins: {
+            datalabels: {
+              formatter: function(value, context) {
+                return context.chart.data.labels[context.dataIndex];
+              },
+              align: 'left',
+              fontSize: 3
+            }
+          },
+          legend: {
+            display: false,
+          },
+          animation: {
+            duration: 2000,
+            easing: 'easeOutCirc' 
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

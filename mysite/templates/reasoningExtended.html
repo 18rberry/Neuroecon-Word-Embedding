@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../../../favicon.ico">
+
+    <title>Word Vectors Additional Features</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../../static/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="../../static/css/jumbotron.css" rel="stylesheet">
+    <style>
+      body {
+
+            background-size: cover;
+            background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAADCAYAAABfwxXFAAAAYklEQVQYVwFXAKj/AauTov8ZHxAALDQvAAIKAQD95PoArqG1ACE2GgAB0MXF/yUqJQD16ewAESEbAPfj6wDRucYAHDMxAAHa0sj/FRwfAODM1gAuPjMA8ejoAJ19mgBng3IAm8UiRW/8E2sAAAAASUVORK5CYII=");
+          }
+    </style>
+  </head>
+
+  <body class="bg-light">
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="http://127.0.0.1:8000/polls/#">Home <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Word Embeddings</a>
+            <div class="dropdown-menu" aria-labelledby="dropdown01">
+              <a class="dropdown-item" href="http://127.0.0.1:8000/polls/reasoning#">Analogies + Similarity</a>
+              <a class="dropdown-item" href="http://127.0.0.1:8000/polls/reasoningExtended">More</a>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled" href="#">PCA Graphs</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+            <div class="dropdown-menu" aria-labelledby="dropdown01">
+              <a class="dropdown-item" href="#">Action</a>
+              <a class="dropdown-item" href="#">Another action</a>
+              <a class="dropdown-item" href="#">Something else here</a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container">
+      <div class="text-center">
+        <br>
+        <div align = "right">
+          <form method="POST" action = "/polls/reasoningExtended">
+            <div class="form-group" name="forms" style="width: 250px">
+              <label for="sel1">Choose Which Model to Load:</label>
+              <select class="form-control" id="sel1" name = "group">
+                <option value="1" name="google">GoogleNews-Word2Vec</option>
+                <option value="2">Twitter-Glove</option>
+                <option value="3">300Dimensions-Glove</option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <h2 size="20" style="font-family:Georgia">Word Embeddings Additional Features</h2>
+        <p class="lead">(Inputs are Case Sensitive)</p>
+      </div>
+      <br><br><br>
+      <div class="row">
+        <div class="col-md-6 order-md-1">
+          <h4 class="mb-3">Analogies</h4>
+          <p> Finds the Corresponding Analogical Word </p>
+          <form method = "POST" action = "/polls/reasoningExtended"> {% csrf_token %}
+            <div class="row">
+              <div class="col-md-4 mb-3">
+                {% for c in first %}
+                  <input type="text" class="form-control" name="first" placeholder="first" value={{c}} required>
+                  <div class="invalid-feedback">
+                  Valid first name is required.
+                  </div>
+                {% endfor %}
+              </div>
+              <p> + </p>
+              <div class="col-md-4 mb-3">
+                {% for c in second %}
+                  <input type="text" class="form-control" name="second" placeholder="second" value={{c}} required>
+                  <div class="invalid-feedback">
+                  Valid last name is required.
+                  </div>
+                {% endfor %}
+              </div>
+              <p> = </p>
+              <button class="btn btn-primary btn-lg" name="button" type="submit" style="margin-left: 15px;margin-right: 15px; height:45px; width:50px ; padding-bottom: 15px">  ?  </button>
+              <div class="col-md-4 mb-4">
+                {% for c in result%}
+                  <div class="p-2 mb-2 bg-primary text-white" style = "border-bottom-right-radius: 4.8px; border-bottom-left-radius: 4.8px; border-top-right-radius: 4.8px; border-top-left-radius: 4.8px; height:45px;width:180px">{{c}}</div>
+                {% endfor %}
+              </div>
+            </div>
+            <br>
+          </form>
+        </div>
+        <div class="col-md-6 order-md-1">
+          <h4 class="mb-3"> Similarity </h4>
+          <p> Finds the Cosine Similarity Between 2 Words </p>
+          <form method = "POST" action = "/polls/reasoningExtended"> {% csrf_token %}
+            <div class="row">
+              <div class="col-md-4 mb-3">
+                {% for c in firstSim %}
+                  <input type="text" class="form-control" name="firstSim" placeholder="first" value={{c}} required>
+                  <div class="invalid-feedback">
+                  Valid first name is required.
+                  </div>
+                {% endfor %}
+              </div>
+              <div class="col-md-4 mb-3">
+                {% for c in secondSim %}
+                  <input type="text" class="form-control" name="secondSim" placeholder="second" value={{c}} required>
+                  <div class="invalid-feedback">
+                  Valid last name is required.
+                  </div>
+                {% endfor %}
+              </div>
+              <button class="btn btn-primary btn-lg" name="button3" type="submit" style="margin-left: 15px;margin-right: 15px; height:45px; width:50px ; padding-bottom: 15px">  ?  </button>
+              <div class="col-md-4 mb-4">
+                {% for c in result5%}
+                  <div class="p-2 mb-2 bg-primary text-white" style = "border-bottom-right-radius: 4.8px; border-bottom-left-radius: 4.8px; border-top-right-radius: 4.8px; border-top-left-radius: 4.8px; height:45px;width:160px">{{c}}</div>
+                {% endfor %}
+              </div>
+            </div>
+            <br>
+          </form>
+        </div>
+        
+        
+        <br><br>
+      </div>
+      <br><br><br>
+      <div class="row">
+        <div class="col-md-6">
+          <h4 class="mb-3"> Top-N Similar Words </h4>
+          <p> Finds Most Similar Words (Number of Results is Adjustable) </p>
+          <form method = "POST" action = "/polls/reasoningExtended"> {% csrf_token %}
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                {% for c in similarity %}
+                  <input type="text" class="form-control" name="similarity" placeholder="similarity" value={{c}} required>
+                  <div class="invalid-feedback">
+                  Valid first name is required.
+                  </div>
+                {% endfor %}
+              </div>
+              <div class="col-md-2 mb-3">
+                {% for c in number %}
+                  <input type="text" class="form-control" name="number" placeholder="#" value={{c}} required>
+                  <div class="invalid-feedback">
+                  Valid first name is required.
+                  </div>
+                {% endfor %}
+              </div>
+              <button class="btn btn-primary btn-lg" name="button1" type="submit" style="height:45px;width:50px; padding-bottom: 15px">  ?  </button>
+              <div class="col-md-3 mb-3">
+                {% for c in result2%} 
+                  <div class="p-2 mb-2 bg-primary text-white" style = "border-bottom-right-radius: 4.8px; border-bottom-left-radius: 4.8px; border-top-right-radius: 4.8px; border-top-left-radius: 4.8px; width:190px">{{c}}</div>
+                {% endfor %}
+              </div>
+              <div class="col-md-2 mb-3">
+                {% for c in result3%}
+                  <div class="p-2 mb-2 bg-primary text-white" style = "border-bottom-right-radius: 4.8px; border-bottom-left-radius: 4.8px; border-top-right-radius: 4.8px; border-top-left-radius: 4.8px; margin-left: 50px; width: 60px">{{c}}</div>
+                {% endfor %}
+              </div>
+            </div>
+            
+          </form>
+          
+          
+        </div>
+        <div class="col-md-6">
+          <h4 class="mb-3"> Adjectives </h4>
+          <p> Finds Most Descriptive Adjectives (Number of Results is Adjustable) </p>
+           <form method = "POST" action = "/polls/reasoningExtended"> {% csrf_token %}
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                {% if phrase %}
+                  <input type="text" class="form-control" name="phrase" placeholder="phrase" value = {{phrase}} required>
+                  <div class="invalid-feedback">
+                  Valid first name is required.
+                  </div>
+                {% else %}
+                  <input type="text" class="form-control" name="phrase" placeholder="phrase" value = "Nike" required>
+                  <div class="invalid-feedback">
+                  Valid first name is required.
+                  </div>
+                {% endif %}
+              </div>
+              <div class="col-md-2 mb-3">
+                {% for c in number2 %}
+                  <input type="text" class="form-control" name="number2" placeholder="#" value={{c}} required>
+                  <div class="invalid-feedback">
+                  Valid first name is required.
+                  </div>
+                {% endfor %}
+              </div>
+              <button class="btn btn-primary btn-lg" name="button2" type="submit" style="height:45px;width:50px; padding-bottom: 15px">  ?  </button>
+              <div class="col-md-3 mb-3">
+                {% for c in resultPhrase2%}
+                  <div class="p-2 mb-3 bg-primary text-white" style = "border-bottom-right-radius: 4.8px; border-bottom-left-radius: 4.8px; border-top-right-radius: 4.8px; border-top-left-radius: 4.8px;width:190px">{{c}}</div>
+                {% endfor %}
+              </div>
+              <div class="col-md-2 mb-2">
+                {% for c in resultPhrase3%}
+                  <div class="p-2 mb-3 bg-primary text-white" style = "border-bottom-right-radius: 4.8px; border-bottom-left-radius: 4.8px; border-top-right-radius: 4.8px; border-top-left-radius: 4.8px; margin-left: 50px; width:60px">{{c}}</div>
+                {% endfor %}
+              </div>
+            </div>
+            
+          </form>
+        </div>
+      </div>
+      <br><br><br><br>
+    </div>
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="../../../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script src="../../static/js/popper.min.js"></script>
+    <script src="../../static/js/bootstrap.min.js"></script>
+    <script src="../../static/js/holder.min.js"></script>
+  </body>
+</html>
