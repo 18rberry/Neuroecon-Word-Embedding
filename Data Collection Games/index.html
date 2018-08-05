@@ -1,0 +1,497 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Stereotype Game</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <style>
+      body {
+        padding-top: 5rem;
+      }
+      .starter-template {
+        padding: 3rem 1.5rem;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <!-- style="background-color: rgba(246, 101, 28, 0.1); box-shadow: 0px -490px 50px 0px white inset;" -->
+  <body  onload="firstValue();">
+     <nav class="navbar navbar-expand-md navbar-dark fixed-top" style = "background-color: rgb(50,50,50)">
+      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+          <img id="face" src="https://img.clipartxtras.com/bebbb5a4d1d3835848cfa16b9704cdfe_brain-clipart-transparent-background-clipart-pie-cliparts-brain-clipart-transparent-background_942-808.png" style="width:50px;height:40px;">
+          <a class="navbar-brand" style="color: rgba(51, 182, 233); margin-left: 10px; font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif; font-size: 18px">Neuroeconomics</a>
+          <li class="nav-item dropdown" style = "margin-left: 45px">
+            <a class="nav-link dropdown-toggle" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" style="color:white; font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif; font-size: 14px">Versions</a>
+            <ul class="dropdown-menu" aria-labelledby="dropdown01" style = "background-color: rgb(46, 39, 39); border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; border-top-right-radius: 5px; border-top-left-radius: 5px; min-width: auto; font-size: 14px; font-weight: 100">
+              <a class="dropdown-item" href="https://neuroeconomicsgames.appspot.com/" style = "color: rgb(165, 242, 242)">Easy</a>
+              <a class="dropdown-item" href="https://neuroeconomicsgames.appspot.com/hard/" style = "color: rgb(165, 242, 242)">Hard</a>
+            </ul>
+          </li>
+          <li class="nav-item dropdown" style = "margin-left: 45px">
+            <a class="nav-link dropdown-toggle" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" style="color:white; font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif; font-size: 14px">Background Resources</a>
+            <ul class="dropdown-menu" aria-labelledby="dropdown01" style = "background-color: rgb(46, 39, 39); border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; border-top-right-radius: 5px; border-top-left-radius: 5px; min-width: auto; font-size: 14px; font-weight: 100; text-align: left">
+              <h6 class="dropdown-header">Stereotyping</h6>
+              <a class="dropdown-item" href="https://en.wikipedia.org/wiki/Stereotype_content_model" style = "color: rgb(165, 242, 242)">Content Model</a>
+              <a class="dropdown-item" href="http://nobaproject.com/modules/prejudice-discrimination-and-stereotyping" style = "color: rgb(165, 242, 242)">Prejudice</a>
+              <div class="dropdown-divider"></div>
+              <h6 class="dropdown-header">Discrimination</h6>
+              <a class="dropdown-item" href="http://www.slate.com/articles/business/the_dismal_science/2005/04/a_roshanda_by_any_other_name.html"style = "color: rgb(165, 242, 242)">By Name</a>
+              <a class="dropdown-item" href="https://www.politifact.com/punditfact/statements/2015/mar/15/jalen-ross/black-name-resume-50-percent-less-likely-get-respo/" style = "color: rgb(165, 242, 242)">Resumes</a>
+            </ul>
+          </li>
+          <li class="nav-item" style = "margin-left: 45px">
+            <a class="nav-link disabled" href="http://neuroecon.berkeley.edu/" style="color:white; font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif; font-size: 14px">Neuroeconomic Lab</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <br><br>
+    <main role="main" class="container">
+      <div class= "text-center" style="">
+        <h4 style='margin-left: 0px; margin-bottom: 35px;font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif; font-size: 38px; color: rgb(34, 61, 118)'>Estimate the Biases of Others.</h4>
+      </div>
+      <br>
+      <div class = "text-center">
+        <h5 style = "color: rgb(60, 159, 201); font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif;font-size: 18px; margin-bottom: 20px;">We surveyed a large group of US respondents  to judge the <br><span style="color:red">warmth </span> and <span style="color:red">competence </span> of many types of people:<button style = "width: 28px; height: 28px; margin-left: 10px; border-bottom-right-radius: 20px; border-bottom-left-radius: 0px; border-top-right-radius: 20px; border-top-left-radius: 20px;"type="button" class="btn-sm btn-secondary" data-toggle="tooltip" data-placement="right" title="The target could be a person's name, a person's occupation, or a person from a certain state. When you see the information below, try to imagine someone who fits that description.">
+              ?
+        </button></h5> 
+        
+      </div>
+      <br>
+      <hr style = "width: 300px">
+      <br>
+      <div class ="row">
+        <div class = "col-md-3">
+          <div class= "d-none">
+            <form method = "POST" action = "/" name="form1"> {% csrf_token %}
+              <div class="row">
+                <div class="col-md-4 mb-3">
+                  <input type="text" class="form-control" name="score" placeholder="first" value="" id = "score" required>
+                  <div class="invalid-feedback">
+                  Valid first name is required.
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class = "col-md-6" style="margin-top: -20px">
+          <br>
+          <h5 class = "text-center" style = "font-weight: 100; font-family: Museo-Sans,Helvetica,Arial,sans-serif;font-size: 26px;">Based on the survey average, <br> who do you estimate to be</h5>
+          <h5 class = "text-center" style = "font-weight: 100; font-family: Museo-Sans,Helvetica,Arial,sans-serif;font-size: 26px; color: red; margin-top: 5px" id = "wc"></h5>
+          <div class = "row" style= "margin-top: -40px">
+            <div class = "col-md-10">
+            </div>
+            <div class = "col-md-1">
+              <button style = "width: 30px; height: 30px; margin-left: -10px; border-bottom-right-radius: 30px; border-bottom-left-radius: 0px; border-top-right-radius: 30px; border-top-left-radius: 30px;"type="button" class="btn-sm btn-secondary" data-toggle="tooltip" data-placement="right" title="WARMTH: how much does this person tend to be friendly, be caring, and have good intentions toward others?  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;COMPETENCE: how much does this person tend to be intelligent, effective, and capable of carrying out his or her intentions?">
+              ?
+              </button>
+            </div>
+            <div class = "col-md-1">
+            </div>
+          </div>
+          <br><br>
+          <div class = "row">
+            <button class="btn btn-md" name="competence1" type="button" onclick = "submit1();" style="width: 240px;height: 80px; margin-top: 10px; margin-left: 40px; background-color: rgba(51, 182, 233); color: white" id = "firstButton"></button>
+            <button class="btn btn-md" name="competence2" type="button" onclick = "submit3();" style="width: 240px;height: 80px; margin-top: 10px; margin-left: 15px; background-color: rgb(34, 61, 118); color: white" id = "secondButton"></button>
+          </div>
+          <br>
+          <h4 style="text-align: center; margin-bottom: 20px; " id ="result"></h4>
+          <br>
+        </div>
+        <div class = "col-md-3">
+          <div class = "container" style="border-bottom-right-radius: 20px; border-bottom-left-radius: 20px; border-top-right-radius: 20px; border-top-left-radius: 20px; background-color: rgba(238, 204, 204, 0.3); height: 120px; width: 200px">
+            <br>
+            <h5 style = "text-align: center; text-decoration: underline">Score</h5>
+            <h4 style = "text-align: center" id = "correct">0/0</h4>
+            <br>
+          </div>
+          <br>
+          <button class="btn btn-danger btn-md" name="competence1" type="button" onclick = "moveOn();" style="width: 220px;height: 40px; margin-top: 55px; margin-left: 15px" id = "next">Next</button>
+        </div>
+      </div>
+      <div class = "row" style = "margin-top: -40px"> 
+        <div class = "col-md-3">
+        </div>
+        <div class = "col-md-3">
+          <h4 class = "text-center" id = "targetOne" style = "font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif;font-size: 20px; color: rgba(51, 182, 233);"></h4>
+        </div>
+        <div class = "col-md-3">
+          <h4 class = "text-center" id = "targetTwo" style = "font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif;font-size: 20px; color: rgb(34, 61, 118);"></h4>
+        </div>
+        <div class = "col-md-3">
+        </div>
+      </div>
+      
+      <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalCenterTitle">Share Your Score!</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class = "row">
+                <div class = "col-md-4">
+                  <h5 class = "text-center" style = "font-weight: 200; font-family: Museo-Sans,Helvetica,Arial,sans-serif;font-size: 20px;">You got</h5>
+                  <h5 class = "text-center" id = "finalScore" style = "font-weight: 200; font-family: Museo-Sans,Helvetica,Arial,sans-serif;font-size: 20px; color: red"></h5>
+                  <h5 class = "text-center" style = "font-weight: 200; font-family: Museo-Sans,Helvetica,Arial,sans-serif;font-size: 20px;">right!</h5>
+                </div>
+                <div class = "col-md-4">
+                  <h5 class = "text-center" style = "font-weight: 200; font-family: Museo-Sans,Helvetica,Arial,sans-serif;font-size: 18px;">Would you now</h5>
+                  <h5 class = "text-center" id = "percentile" style = "font-weight: 200; font-family: Museo-Sans,Helvetica,Arial,sans-serif;font-size: 18px;">like to try the</h5>
+                  <h5 class = "text-center" style = "font-weight: 200; font-family: Museo-Sans,Helvetica,Arial,sans-serif;font-size: 18px;">hard version?</h5>
+                </div>
+                <div class = "col-md-4">
+                  <h5 class = "text-center" style = "font-weight: 200; font-family: Museo-Sans,Helvetica,Arial,sans-serif;font-size: 18px;">Share on Facebook and Twitter</h5>
+                  <a href="https://www.twitter.com" style = "margin-left: 20px">
+                    <img src="https://i2.wp.com/indusdictum.com/wp-content/uploads/2017/08/twitter-logo-4.png?ssl=1" alt="HTML tutorial" style="width:42px;height:42px;">
+                  </a>
+                  <a href="https://facebook.com" style = "margin-left: 10px">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Facebook_logo_%28square%29.png/600px-Facebook_logo_%28square%29.png" alt="HTML tutorial" style="width:42px;height:42px;">
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Play Again!</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <footer class="pt-2 my-md-5 pt-md-3 border-top">
+        <div class="row">
+          <div class= "col-3">
+            <small class="d-block mb-3 text-muted">&copy; UC Berkeley</small>
+          </div>
+        </div>
+      </footer>
+      <br>
+
+    </main>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="../../../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <!-- Chart tools -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+
+
+
+    <!-- tool tip -->
+    <script>
+      $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+      })
+    </script>
+
+    <!-- chart points (adding, removal) , error, and target selection-->
+    <script>
+
+      // Data gathered from study
+      var names = ["Angelica", "Ashley", "Benjamin", "Craig", "Elizabeth", "Eric", "Frank", "Keith", "Lindsey", "Luis", 
+        "Marie", "Michelle", "Nicholas", "Omar", "Randall", "Ruben", "Sara", "Sarah", "Tamara", "William", "Brandon", 
+        "Chase", "Christopher", "Claudia", "David", "Debra", "Harry", "Heather", "Javier", "Jennifer", "Jermaine", "Latasha",
+        "Louis", "Mario", "Miguel", "Monica", "Nancy", "Ryan", "Tyler", "Victoria", ];
+
+      var professions = ["Anthropologist", "Astrologer", "Athletic Trainer", "Biochemist", "Chauffeur", "Chef", "Computer Programmer","Dancer", "Diplomat", "Forensic scientist", "Lifeguard", "Musician", "Phlebotomist", "Piano Tuner", 
+        "Producer", "Solicitor", "Stock Broker", "Welder", "Wigmaker", "Zoologist", "Astronaut", "Auctioneer", 
+        "Bookbinder", "Cartographer", "Coffee roaster", "Dermatologist", "Detective", "Guard", "Inspector", 
+        "Mathematician", "Meat packer", "Midwife", "Neuroscientist", "Pediatrician", "Psychologist", "Sociologist",
+        "Songwriter", "Taxi Driver", "Tutor", "Veterinarian"];
+
+      var states = ["Person from Alaska", "Person from Colorado", 
+        "Person from Indiana", "Person from Kansas", "Person from Kentucky", "Person from Louisiana", 
+        "Person from Maryland", "Person from Michigan", "Person from Minnesota", "Person from Missouri", 
+        "Person from Montana", "Person from Nevada", "Person from New Mexico", "Person from North Dakota", 
+        "Person from Ohio", "Person from Oregon", "Person from Tennessee", "Person from Washington", 
+        "Person from Wisconsin", "Person from Wyoming", "Person from Arizona", "Person from Arkansas", 
+        "Person from Connecticut", "Person from Delaware", "Person from Florida", "Person from Hawaii", 
+        "Person from Idaho", "Person from Illinois", "Person from Maine", "Person from Massachusetts", 
+        "Person from Nebraska", "Person from New Hampshire", "Person from North Carolina","Person from Oklahoma", 
+        "Person from Pennsylvania", "Person from Texas", "Person from Utah", "Person from Vermont", 
+        "Person from Virginia", "Person from West Virginia"];  
+
+      var xNames = [54.08, 69.95238095, 56.33333333, 52.27272727, 70.04166667, 58.68181818, 50.42857143, 57.35714286,
+        63.7826087, 55.93103448, 66.07692308, 64.13043478, 57.04761905, 41.875, 49.30434783, 54.92, 65.86363636,
+        66.39130435, 50.80769231, 56.85714286, 50.88888889, 51.0952381, 61.91666667, 54.125, 62, 53.05263158,
+        63.41666667, 62.29411765, 50.20833333, 63.375, 52.48275862, 55.33333333, 61, 63.57692308, 52.38709677, 
+        60.51612903, 59.19230769, 53.66666667, 57.66666667, 55.95454545];
+
+      var xProfessions = [64.39285714, 60.5, 57.90909091, 47.69565217, 70.22727273, 65.20833333,
+        44.60714286, 65.16, 63.78947368, 49.62068966, 70.76, 71.85, 59.77777778, 65.47826087, 52.04347826, 38.56521739,
+        41.67857143, 47.93333333, 63.375, 77.15, 59.42307692, 41.66666667, 45.66666667, 58.14285714, 64.15384615, 60.6, 
+        35.72727273, 35, 40.55555556, 39.28571429, 37.95238095, 78.125, 45.92, 78.85185185, 63.17241379, 64.90909091, 
+        62.03571429, 37.39393939, 70.81818182, 74.96];
+
+      var xStates = [59.53571429, 66.16129032, 58.42857143, 52.875, 58.27586207, 67.44827586,
+        60, 58.69230769, 61.11111111, 57.73913043, 59.72727273, 58.32142857, 54.28571429, 57.95238095, 58.76, 56.34782609,
+        65.62068966, 62.19230769, 60.33333333, 62.3, 52.6, 54.95833333, 
+        54.34782609, 57.83333333, 54.41935484, 73.69230769, 59, 53.64, 49.95, 42.75, 51.56, 55.6, 55.2962963, 
+        52.54545455, 56.81818182, 59.65384615, 54.51851852, 60.57142857, 62.84615385, 54.83333333];
+    
+      var yNames = [60, 64.45454545, 58.62962963, 61.47368421, 69.4, 61.95652174, 59.09090909, 66.75, 60.72, 49.86363636,
+        70.63636364, 60.31818182, 56.83333333, 51.2, 54.36, 55.54545455, 56.83333333, 66.125, 45.93103448, 72.15384615, 56.3,
+        51.74193548, 72.11538462, 67.24137931, 69.10714286, 63.88461538, 68.22727273, 66, 49.83333333, 65.34615385, 
+        52.17241379, 49.53846154, 63.55555556, 54.95238095, 51.16666667, 63.55555556, 60.31578947, 67.55555556, 
+        54.13636364, 68.35714286]
+      var yProfessions = [80.85714286, 62.2173913, 69.48275862, 81.26315789, 66, 68.68965517, 79.84615385, 60.52941176, 76.04545455, 75.59259259, 70.13333333, 54.8, 72.31578947, 69.23529412, 75.33333333, 52.73913043, 70.83333333, 
+        69.88461538, 61.26923077, 73.48275862, 87.35294118, 57.67741935, 57.20833333, 76.20833333, 52.86956522, 75.125, 
+        74.40625, 49.36842105, 64.69565217, 78.46428571, 48.2, 65.17391304, 82.41666667, 83.76, 62.91304348, 63.74074074, 
+        56.75, 43.35, 67.38709677, 76.85185185];
+
+      var yStates = [61.42857143, 67.38095238, 55.58333333, 53.54166667, 56.76, 45.94736842, 67.19230769,
+        65.16, 62.65714286, 55.91666667, 62.05263158, 57.63157895, 57.73076923, 59.03846154, 58.92, 61.65384615,
+        54.15789474, 72.33333333, 58.66666667, 56.04166667, 51.86956522, 41.15625, 70.625, 67.26086957, 45.46666667, 
+        61.08333333, 54.11538462, 62.27272727, 67.11538462, 77.2, 51.95454545, 78.5, 54.24137931, 43, 68.64285714, 
+        49.4137931, 57.92, 72.54545455, 55.41666667, 48.32];
+      
+      var targets = [names, professions, states];
+      var xValues = [xNames, xProfessions, xStates];
+      var yValues = [yNames, yProfessions, yStates];
+
+      var q=0; //counter
+      var x,y, x2, y2;
+      var randomCategory, randomCategory2;
+      var random, random2;
+      var buttonCounter;
+      var correct = 0, total = 0;
+      var firstTarget, secondTarget, clicker, next;
+
+      function firstValue() {
+        next = false;
+        clicker = true;
+        buttonCounter = Math.floor(Math.random() * 2); 
+        if(buttonCounter == 0) {
+          document.getElementById("wc").innerText = "warmer?";
+        }
+        else{
+          document.getElementById("wc").innerText = "more competent?";
+        }
+
+        randomCategory = Math.floor(Math.random() * 3); 
+        random = Math.floor(Math.random() * targets[randomCategory].length); 
+
+        firstTarget = targets[randomCategory][random];
+        document.getElementById("firstButton").innerText = firstTarget;
+        x = xValues[randomCategory][random];
+        y = yValues[randomCategory][random];
+        
+        targets[randomCategory].splice(random, 1);
+        xValues[randomCategory].splice(random, 1);
+        yValues[randomCategory].splice(random, 1);
+        
+
+        random2 = Math.floor(Math.random() * targets[randomCategory].length);
+        secondTarget = targets[randomCategory][random2];
+        document.getElementById("secondButton").innerText = secondTarget;
+
+        x2 = xValues[randomCategory][random2];
+        y2 = yValues[randomCategory][random2];
+        
+        targets[randomCategory].splice(random2, 1);
+        xValues[randomCategory].splice(random2, 1);
+        yValues[randomCategory].splice(random2, 1);
+      }
+
+      function submit1() {
+          if(buttonCounter == 0 && clicker == true) {
+            //display correct or not
+            if(x >= x2) {
+              document.getElementById("result").innerText="Correct!";
+              document.getElementById("targetOne").innerText= x.toFixed(2);  
+              document.getElementById("targetTwo").innerText= x2.toFixed(2);
+              correct++;
+            }
+            else {
+              document.getElementById("result").innerText="Incorrect";
+              document.getElementById("targetOne").innerText= x.toFixed(2);  
+              document.getElementById("targetTwo").innerText= x2.toFixed(2);
+
+            }
+            total++;
+            document.getElementById("correct").innerText=correct+"/"+total;
+            clicker = false;
+          }
+          else if(buttonCounter == 1 && clicker == true) {
+            //display correct or not
+            if(y >= y2) {
+              document.getElementById("result").innerText="Correct!";
+              document.getElementById("targetOne").innerText= y.toFixed(2);  
+              document.getElementById("targetTwo").innerText= y2.toFixed(2);
+              correct++;
+            }
+            else {
+              document.getElementById("result").innerText="Incorrect";
+              document.getElementById("targetOne").innerText= y.toFixed(2);  
+              document.getElementById("targetTwo").innerText= y2.toFixed(2);
+            }
+            total++;
+            document.getElementById("correct").innerText=correct+"/"+total;
+            clicker = false;
+          }
+          next = true;
+
+      }
+
+      function submit3() {
+          if(buttonCounter == 0 && clicker == true) {
+            //display correct or not
+            if(x < x2) {
+              document.getElementById("result").innerText="Correct!";
+              document.getElementById("targetOne").innerText= x.toFixed(2);  
+              document.getElementById("targetTwo").innerText= x2.toFixed(2);
+              correct++;
+            }
+            else {
+              document.getElementById("result").innerText="Incorrect";
+              document.getElementById("targetOne").innerText= x.toFixed(2);  
+              document.getElementById("targetTwo").innerText= x2.toFixed(2);
+            }
+            total++;
+            document.getElementById("correct").innerText=correct+"/"+total;
+            clicker = false;
+          }
+          else if(buttonCounter == 1 && clicker == true) {
+            //display correct or not
+            if(y < y2) {
+              document.getElementById("result").innerText="Correct!";
+              document.getElementById("targetOne").innerText= y.toFixed(2);  
+              document.getElementById("targetTwo").innerText= y2.toFixed(2);
+              correct++;
+            }
+            else {
+              document.getElementById("result").innerText="Incorrect";
+              document.getElementById("targetOne").innerText= y.toFixed(2);  
+              document.getElementById("targetTwo").innerText= y2.toFixed(2);
+            }
+            total++;
+            document.getElementById("correct").innerText=correct+"/"+total;
+            clicker = false;
+          }
+          next = true;
+      }
+
+
+      function moveOn() {
+        if( q < 19 && next == true) {
+          
+          buttonCounter = Math.floor(Math.random() * 2); 
+        
+          if(buttonCounter == 0) {
+            document.getElementById("wc").innerText = "warmer?";
+          }
+          else{
+            document.getElementById("wc").innerText = "more competent?";
+          }
+
+          if (q < 9) {
+
+            //next round
+            randomCategory = Math.floor(Math.random() * 3); 
+            random = Math.floor(Math.random() * targets[randomCategory].length); 
+
+            firstTarget = targets[randomCategory][random];
+            document.getElementById("firstButton").innerText = firstTarget;
+            x = xValues[randomCategory][random];
+            y = yValues[randomCategory][random];
+
+            //gets rid of point so no values are repeated
+            targets[randomCategory].splice(random, 1);
+            xValues[randomCategory].splice(random, 1);
+            yValues[randomCategory].splice(random, 1);
+
+
+            random2 = Math.floor(Math.random() * targets[randomCategory].length); 
+            secondTarget = targets[randomCategory][random2];
+            document.getElementById("secondButton").innerText = secondTarget;
+            x2 = xValues[randomCategory][random2];
+            y2 = yValues[randomCategory][random2];
+
+            targets[randomCategory].splice(random2, 1);
+            xValues[randomCategory].splice(random2, 1);
+            yValues[randomCategory].splice(random2, 1);
+
+            document.getElementById("result").innerText="";
+            document.getElementById("targetOne").innerText="";
+            document.getElementById("targetTwo").innerText="";
+            clicker = true;
+            next = false;
+            q++;       
+
+           
+          }
+          else {
+            //next round
+            randomCategory = Math.floor(Math.random() * 3); 
+            random = Math.floor(Math.random() * targets[randomCategory].length); 
+            firstTarget = targets[randomCategory][random];
+
+            document.getElementById("firstButton").innerText = firstTarget;
+            x = xValues[randomCategory][random];
+            y = yValues[randomCategory][random];
+
+            //gets rid of point so no values are repeated
+            targets[randomCategory].splice(random, 1);
+            xValues[randomCategory].splice(random, 1);
+            yValues[randomCategory].splice(random, 1);
+
+            randomCategory2 = Math.floor(Math.random() * 3); 
+            random2 = Math.floor(Math.random() * targets[randomCategory2].length); 
+            secondTarget = targets[randomCategory2][random2];
+
+            document.getElementById("secondButton").innerText = secondTarget;
+            x2 = xValues[randomCategory2][random2];
+            y2 = yValues[randomCategory2][random2];
+
+            targets[randomCategory2].splice(random2, 1);
+            xValues[randomCategory2].splice(random2, 1);
+            yValues[randomCategory2].splice(random2, 1);
+
+            document.getElementById("result").innerText="";
+            document.getElementById("targetOne").innerText="";
+            document.getElementById("targetTwo").innerText="";
+            next = false;
+            clicker = true;
+            q++; 
+            if(q == 19) {
+              document.getElementById("next").innerText = "Click to Finish!";
+            }
+
+          }
+        }  
+        else if (q >= 19 && next == true) {
+          localStorage.lastname = correct;
+          document.getElementById("score").value = correct;
+          document.form1.submit();
+        }
+      }     
+    </script>
+    {% if score %}
+    <script>
+      function show(score) {
+        $('#modal').modal('show');
+          document.getElementById("finalScore").innerText = localStorage.lastname + "/" + "20";
+          clicker = false;
+      }
+      show({score});
+    </script>
+    {% endif %}
+  </body>
+</html>
