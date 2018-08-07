@@ -244,11 +244,4 @@ def graph(request):
 
     return render(request, 'graph.html')
 
-def stereotype(request):
-
-    test = request.POST.get("test")
-    print(test)
-
-    return render(request, 'stereotype.html')
-
 
