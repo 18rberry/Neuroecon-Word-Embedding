@@ -49,10 +49,6 @@ def index(request):
 
     return render(request, 'index.html')
 
-def reasoningExtended(request):
-
-    # sends results back to frontend
-    return render(request, 'reasoningExtended.html')
 
 def reasoning(request):
 
