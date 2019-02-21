@@ -10,6 +10,7 @@ import json
 import pickle
 import os
 
+# Descriptive Adjectives caching
 SKIP_CACHING = False
 model = Magnitude("GoogleNews-vectors-negative300.magnitude")
 adj_cache_path = 'adj_cache.pickle'
@@ -75,7 +76,6 @@ def reasoning(request):
 
     # Analogies
     if first:
-        # word2vec code for analogies
         result = model.most_similar_cosmul(
             positive=[second, third],
             negative=[first],
@@ -123,24 +123,11 @@ def reasoning(request):
 def vector_array(brand_vectors):
     result = {}
     for i in brand_vectors:
-        if ' ' in i:
-            try:
-                new = i.replace(" ", "_")
-                result[i] = word_vecs[new]
-            except:
-                pass
-        elif '-' in i:
-            try:
-                new = i.replace("-", "_")
-                result[i] = (word_vecs[new])
-            except:
-                pass
+        i = i.replace(" ", "_").replace('-', '_')
+        if i in model:
+            result[i] = model.query(i)
         else:
-            try:
-                result[i] = word_vecs[i]
-            except KeyError:
-                pass
-
+            result[i] = np.array([0] * 300)
             #if brand name is something like "taco bell" or "Taco Bell": try "Taco_Bell"
             #this applies to two word brands only
     return result
@@ -160,23 +147,23 @@ dict_test['what'] = 25
 def graph(request):
     # if statement required to load the page when no input has been typed in box
     # brands = (request.POST['brand_list_input']).split('\r\n')
-    brands = ['hello', 'McDonalds']
+    brands = ['hello', 'McDonalds', 'bye']
 
     # brands is the list of brands and labels from user input
     if (request.POST.get('brand_list_input') != None):
-        brands = (request.POST.get('brand_list_input')).split(" ")
+        brands = (request.POST.get('brand_list_input')).splitlines()
     # for testing purposes
     else:
-        brands = ["hello"]
+        brands = ["hello", 'cya']
     # single_wv is a dictionary whose keys are brands and values are 2 xy PCA coord lists'
     single_wv = {}
     master_dict = {}
 
-
-
-    # # creates a dictionary brand_dict: brands, with their word vectors
+    # creates a dictionary brand_dict: brands, with their word vectors
     brand_dict = vector_array(brands)
-    brand_array = np.array(extract_list(brand_dict))
+    print(list(brand_dict))
+    brand_array = np.array([v for k,v in brand_dict.items()])
+    print(len(brand_array))
     pca = PCA(n_components=2)
 
     # pca matrix for 2 component PCA on list brands
@@ -284,7 +271,7 @@ def result(request):
 
 # def result(request):
 #     brands = request.POST['brand_list_input']
-#     single_wv = word_vecs[brands]
+#     single_wv = model[brands]
 #     for number, label in enumerate(brands):
-#         single_wv[number] = word_vecs[label]
+#         single_wv[number] = model[label]
 #     return render(request, 'graph/result.html', {'single_wv': single_wv})
