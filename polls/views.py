@@ -1,29 +1,11 @@
-from django.shortcuts import render
-
 # Create your views here.
-from django.http import HttpResponse
-import gensim
-from gensim.models import KeyedVectors
-import gensim.models.keyedvectors as word2vec
-from scipy import stats
-import random
-from django.template.response import TemplateResponse
 from django.shortcuts import render
-from django.template import RequestContext
-import matplotlib as mpl
-mpl.use('TkAgg')
-import matplotlib.pyplot as plt
-from sklearn.decomposition import PCA
-from sklearn.decomposition import FastICA, PCA
-from sklearn.metrics.pairwise import cosine_similarity 
-import mpld3
-from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-import cgi
-import spacy
-import numpy as np
-from pymagnitude import *
 from django.utils.safestring import mark_safe
 from django.template import Library
+from pymagnitude import *
+from sklearn.decomposition import PCA
+from sklearn.metrics.pairwise import cosine_similarity
+import numpy as np
 import json
 import pickle
 import os
