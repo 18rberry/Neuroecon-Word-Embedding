@@ -30,7 +30,29 @@ from .models import gameData
 from django.utils.safestring import mark_safe
 from django.template import Library
 import json
+import pickle
+import os
 
+SKIP_CACHING = False
+model = Magnitude("GoogleNews-vectors-negative300.magnitude")
+adj_cache_path = 'adj_cache.pickle'
+
+if SKIP_CACHING:
+    print('Skipping adjective cache. Adjectives will be disabled.')
+elif os.path.exists(adj_cache_path):
+    with open(adj_cache_path, 'rb') as f:
+        adj_map = pickle.load(f) 
+else:
+    print('Caching adjectives. This will take a few seconds...')
+    with open('adjectives.txt', 'rt') as f:
+        adj_map = {}
+        for i, adj in enumerate(f.read().splitlines()):
+            adj_map[adj] = model.query(adj)
+            sys.stdout.write('\r> {} adjectives processed.'.format(i))
+            sys.stdout.flush()
+    print('\nFinished caching!') 
+    with open(adj_cache_path, 'wb') as f:
+        pickle.dump(adj_map, f)
 
 register = Library()
 
@@ -39,260 +61,87 @@ register = Library()
 def js(obj):
     return mark_safe(json.dumps(obj))
 
-def ridSpace(z):
-    tempList = z.split()
-    tempString = ""
-    for c in tempList:
-        q = tempList.pop(0)
-        if(len(tempList)== 0):
-            return q
-        r = tempList.pop(0)
-        tempString = q+"_"+r
-        if(len(tempList)== 0):
-            return tempString
-        z = tempList.pop(0)
-        tempString = tempString + "_" + z
-    return tempString
-
-
-def phraseReturn(x):
-    z = x.split()
-    r = ""
-    for c in z:
-        r = c + r
-    return r
-
+def reformat(s):
+    return '_'.join(s.split()) if s else ''
 
 def index(request):
-    
-
     return render(request, 'index.html')
 
-
 def reasoning(request):
-
-    # load the google word2vec model
-    #model = KeyedVectors.load_word2vec_format('GoogleNews-vectors-negative300.bin', binary=True, limit = 400000)
-    model = Magnitude("GoogleNews-vectors-negative300.magnitude")
-
     # retrieves input information from frontend
-    first = request.POST.get("first")
-    second = request.POST.get("second")
-    third = request.POST.get("third")
-    similarity = request.POST.get("similarity")
-    phrase = request.POST.get("phrase")
-    numberTemp = request.POST.get("number")
-    number2Temp = request.POST.get("number2")
-    firstSim = request.POST.get("firstSim")
-    secondSim = request.POST.get("secondSim")
+    first      = reformat(request.POST.get("first"))
+    second     = reformat(request.POST.get("second"))
+    third      = reformat(request.POST.get("third"))
+    similarity = reformat(request.POST.get("similarity"))
+    phrase     = reformat(request.POST.get("phrase"))
+    firstSim   = request.POST.get("firstSim")
+    secondSim  = request.POST.get("secondSim")
 
+    # Handle number conversions
+    number     = request.POST.get("number")
+    number2    = request.POST.get("number2")
+    number     = int(number)  if number  else 2
+    number2    = int(number2) if number2 else 2
 
-    group = request.POST.get("group")
-    print(group)
+    # Default render params
+    defaults = {
+        'first'     : [first      or 'man'   ], 
+        'second'    : [second     or 'king'  ], 
+        'third'     : [third      or 'woman' ], 
+        'similarity': [similarity or 'boy'   ], 
+        'number'    : [number     or  2      ], #These or's aren't needed
+        'number2'   : [number2    or  2      ], #But I wanted stuff to line up
+        'firstSim'  : [firstSim   or 'gold'  ],
+        'secondSim' : [secondSim  or 'silver'],
+        'phrase'    : phrase     or 'Nike'     #Odd one out : (
+    }
 
-
-    # converts string numbers to ints and sets default value to 2
-    if(numberTemp is None):
-        number = 2
-    else:
-        number = int(numberTemp)
-
-    if(number2Temp is None):
-        number2 = 2
-    else:
-        number2 = int(number2Temp)
-
-
-    # if analogy button is pressed
-    if first is not None:
-
-        # gets rid of spaces in words to get interpreted by word2vec model
-        first = ridSpace(first)
-        second = ridSpace(second)
-        third = ridSpace(third)
-
+    # Analogies
+    if first:
         # word2vec code for analogies
-        try: 
-            result = model.most_similar_cosmul(positive=[second, third], negative=[first], topn=1)
-        except KeyError:
-            x = "INPUT ERROR"
-            return render(request, 'reasoning.html', {'result':[x], 'first':[first], 'second':[second], 
-                'third':[third], 'similarity':["boy"], 'number': [2], 'number2': [2], 'secondSim':["silver"], 
-                'firstSim':["gold"]}) 
-        
-        x = result[0][0]
-        y = result[0][1]
+        result = model.most_similar_cosmul(
+            positive=[second, third],
+            negative=[first],
+            topn=1
+        )
+        defaults['result'] = [result[0][0]]
+        return render(request, 'reasoning.html', defaults)
 
-        # sends results back to frontend
-        return render(request, 'reasoning.html', {'result':[x], 'first':[first], 'second':[second], 
-            'third':[third], 'similarity':["boy"], 'number': [2], 'number2': [2], 'secondSim':["silver"], 
-            'firstSim':["gold"], 't': test1})
+    # Top-N Similar Words
+    if similarity:
+        result = model.most_similar(similarity, topn=number)
+        defaults['result2'], defaults['result3'] = [], []
+        for word, cos_sim in result:
+            defaults['result2'].append(word)
+            defaults['result3'].append(round(cos_sim, 3))
+        return render(request, 'reasoning.html', defaults)
 
-    # if Top-N similarity button is pressed
-    if similarity is not None:
-        
+    # Adjectives
+    if phrase:
+        phrase_vec = model.query(phrase)
+        adj_list = list(adj_map)
+        adj_list.sort(
+            key = lambda a: cosine_similarity(
+                [adj_map[a]],
+                [phrase_vec]
+            )[0][0],
+            reverse = True
+        )
+        defaults['resultPhrase2'] = adj_list[:number2]
+        return render(request, 'reasoning.html', defaults)
 
-        # gets rid of spaces in words to get interpreted by word2vec model
-        similarity = ridSpace(similarity)
+    # Similarity
+    if firstSim:
+        list1 = list(map(reformat,  firstSim.splitlines()))
+        list2 = list(map(reformat, secondSim.splitlines()))
+        result = [
+            round(model.similarity(a,b), 8) for a,b in zip(list1, list2)
+        ]
+        defaults['result5'] = result
+        return render(request, 'reasoning.html', defaults)
 
-        try:
-            # word2vec code for most similar
-            result = model.most_similar(similarity, topn=number)
-        except KeyError:
-            result2 = "INPUT ERROR"
-            result3 = None
-
-            return render(request, 'reasoning.html', {'result2':[result2], 'result3': result3, 'first':["man"], 
-                'second':["king"], 'third':["woman"], 'similarity':[similarity], 'number': [number], 'number2': [2], 
-                'secondSim':["silver"], 'firstSim':["gold"]}) 
-        
-        # set the total amount of results to "number"
-        z = 1
-        temp = str(round(result[0][1], 3))
-        result2 = [result[0][0]]
-        result3 = [temp]
-        while(z < number):
-            result2.append(result[z][0])
-            result3.append(str(round(result[z][1], 3)))
-            z = z+1
-
-        # sends results back to frontend
-        return render(request, 'reasoning.html', {'result2':result2, 'result3': result3, 'first':["man"], 
-            'second':["king"], 'third':["woman"], 'similarity':[similarity], 'number': [number], 'number2': [2], 
-            'secondSim':["silver"], 'firstSim':["gold"]})
-
-    #if adjectives button is pressed
-    if phrase is not None:
-
-        model = KeyedVectors.load_word2vec_format('~/Downloads/GoogleNews-vectors-negative300.bin', binary=True, limit = 200000)
-         # gets rid of spaces in words to get interpreted by word2vec model
-
-        adj_brand_list = phrase.split("\r\n")
-
-        phrase_list = []
-
-        for i in range(0, len(adj_brand_list)):
-            phrase_list.append(ridSpace(adj_brand_list[i]))
-
-        # try:
-        #     # word2vec code; result 4 is a test/ verification
-        #     #this gives: NIKE + cool - adidas
-        #     #[('athletic', .294...),...] format
-        #     result4 = model.most_similar_cosmul(positive=[phrase, "cool"], negative=["adidas"],topn=number2)
-        # except KeyError:
-        #     resultPhrase2 = "INPUT ERROR"
-        #     resultPhrase3 = None
-        #
-        #     return render(request, 'reasoning.html', {'resultPhrase2':[resultPhrase2],'first':["man"],
-        #         'second':["king"], 'third':["woman"], 'similarity':["boy"], 'phrase':phrase, 'number': [2],
-        #         'number2': [number2], 'secondSim':["silver"], 'firstSim':["gold"], 'test': phrase_list, 'test1': adj_brand_list})
-
-        #top 10,000 most common words
-        words2 = np.array(model.index2word[:10000])
-
-        # load the spacy parser and part of speech tagger
-        nlp = spacy.load('en', disable = ['textcat','ner'])
-
-        # ^^probably takes hella time
-
-        words_pos = []
-        proper = []
-
-        #iterating through the most common words
-        for w in words2:
-            w = str(w)
-            if w != '_':
-                w = w.replace('_', ' ')
-            p = nlp(w)[-1].pos_
-            words_pos.append(p)
-            proper.append(w != w.lower())
-        words_pos = np.array(words_pos)
-        proper = np.array(proper)
-
-        arr = model.syn0[:10000]
-        arr = arr / np.linalg.norm(arr, axis=1)[:, np.newaxis]
-
-        def get_similar(vec,pos=None, exclude_proper=False, top=20):
-            vecs = arr
-            ws = words2
-            ps = proper
-            if pos is not None:
-                subset = (words_pos == pos)
-                vecs = vecs[subset]
-                ws = ws[subset]
-                ps = ps[subset]
-            if exclude_proper:
-                vecs = vecs[~ps]
-                ws = ws[~ps]
-                ix = np.argsort(-vec.dot(vecs.T))[:top]
-            return ws[ix]
-
-        final_output_list = []
-        index_list = []
-
-        for i in range(0, len(phrase_list)):
-            index_list.append(i)
-            component_i = model.get_vector(phrase_list[i])
-            try:
-                result_i = get_similar(component_i, pos='ADJ', exclude_proper=True, top=number2)
-            except KeyError:
-                result_i = "Input Not Found"
-            final_output_list.append(result_i)
-
-
-        # component = model.get_vector(phrase)
-        # resultPhrase2 = get_similar(component, pos='ADJ', exclude_proper=True, top=nhttps://click.pstmrk.it/2sm/www.hackerrank.com%2Ftests%2Fdbsclk6pk50%2Flogin%3Fb%3DeyJ1c2VybmFtZSI6ImN6aHU0M0BiZXJrZWxleS5lZHUiLCJwYXNzd29yZCI6IjQ3OWUxNzBhIiwiaGlkZSI6dHJ1ZX0%3D/n-LA4AI/EDcI/_U1lbo-824/aHJ3LXRlc3QtaW52aXRlumber2)
-
-        # sends results back to frontend
-        return render(request, 'reasoning.html', {'resultPhrase2': final_output_list,'first':["man"], 'second':["king"],
-            'third':["woman"], 'similarity':["boy"], 'phrase':phrase, 'number': [2], 'number2': [number2], 
-            'secondSim':["silver"], 'firstSim':["gold"], 'test': phrase_list, 'test1': final_output_list})
-
-    # if similarity button is pressed
-    if firstSim is not None:
-
-        result = []
-
-        firstSim_list = firstSim.split("\r\n")
-        secondSim_list = secondSim.split("\r\n")
-        length_of_shortest_input = min(len(firstSim_list), len(secondSim_list))
-
-        # gets rid of spaces in words (on the same line) to get interpreted by word2vec model
-        for i in range(0, length_of_shortest_input):
-            firstSim_list[i] = ridSpace(firstSim_list[i])
-            secondSim_list[i] = ridSpace(secondSim_list[i])
-
-        # gets rid of spaces in words to get interpreted by word2vec model
-        firstSim1 = ridSpace(firstSim)
-        secondSim = ridSpace(secondSim)
-
-        for i in range(0, length_of_shortest_input):
-            try:
-                result5Temp = model.similarity(firstSim_list[i], secondSim_list[i])
-
-            except KeyError:
-                result5Temp = "Not Found"
-
-            result.append(str(round(result5Temp, 8)))
-
-        # sends results back to frontend with default values in other places
-        return render(request, 'reasoning.html', {'result5': result, 'first':["man"], 'second':["king"],
-            'third':["woman"], 'similarity':["boy"], 'number': [2], 'number2': [2],
-            'secondSim':[secondSim], 'firstSim':[firstSim1], 'test': result})
-
-
-    # sends results back to frontend with default values in other places
-    return render(request, 'reasoning.html', {'first':["man"], 'second':["king"], 'third':["woman"], 
-        'similarity':["boy"], 'number': [2], 'number2': [2], 'secondSim':["silver"], 
-        'firstSim':["gold"]})
-
-
-
-
-
-vec_path = '~/Downloads/GoogleNews-vectors-negative300.bin'
-fastfood = ["McDonalds", "Burger King", "KFC","Subway","Taco Bell","Dairy Queen","Dunkin Donuts","Starbucks","Domino Pizza","Panera Bread","Arby","Chipotle","Pizza Hut","Chick-fil-a","Hardee","Popeyes","Whataburger","Quiznos","Zaxby","Steak-n-Shake","Qdoba","Panda Express","Del Taco","Krispy Kreme","Baskin Robbins"]
-word_vecs = word2vec.KeyedVectors.load_word2vec_format(vec_path, binary=True)
+    # If regular page load, just pass plain defaults
+    return render(request, 'reasoning.html', defaults)
 
 def vector_array(brand_vectors):
     result = {}
