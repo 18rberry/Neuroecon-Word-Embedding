@@ -342,6 +342,7 @@ def graph(request):
     # for testing purposes
     else:
         brands = ["hello"]
+    # single_wv is a dictionary whose keys are brands and values are 2 xy PCA coord lists'
     single_wv = {}
     master_dict = {}
 
@@ -355,7 +356,17 @@ def graph(request):
     # pca matrix for 2 component PCA on list brands
     pca_matrix = pca.fit_transform(brand_array)
 
-    # single_wv is a dictionary whose keys are brands and values are 2 xy PCA coord lists'
+    variance = pca.explained_variance_ratio_
+    try:
+        variance1 = str((variance[0]*100).round(2)) + "%"
+        variance2 = str((variance[1]*100).round(2)) + "%"
+        vartotal = str(((variance[0] + variance[1])*100).round(2)) + "%"
+        master_dict['vari1'] = variance1
+        master_dict['vari2'] = variance2
+        master_dict['vartot'] = vartotal
+
+    except IndexError:
+        pass
 
     for number, label in enumerate(brand_dict):
         single_wv[label] = pca_matrix[number]
@@ -365,6 +376,7 @@ def graph(request):
         master_dict[key] = single_wv[label]
 
     master_dict['labs'] = brands
+
 
     return render(request, 'graph.html', master_dict)
 
