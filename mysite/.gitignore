@@ -1,4 +1,5 @@
 *.magnitude
 *.bin
+*.sqlite3
 __pycache__/
 -.gitignore
