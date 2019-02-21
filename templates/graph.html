@@ -67,7 +67,7 @@
             </div>
 
                    <form method="POST"  action = "/graph" > {% csrf_token %}
-                     <textarea name="brand_list_input" placeholder = "Separate brands by space" id = "brand_list_input" cols="45" rows="10"></textarea>
+                     <textarea name="brand_list_input" placeholder = "Separate brands by newline" id = "brand_list_input" cols="45" rows="10"></textarea>
                       <input type="submit" value="Submit" onclick = "getText()" id = "buttonID" />
                       <input type="button" value="Graph" onclick = "getText()" id = "graphID" />
 
