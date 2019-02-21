@@ -1,3 +1,3 @@
-# Neuroeconomic-Research
-
-Link to website with games: http://labneuroeconomics.pythonanywhere.com/hard/. These are used to gather data for research done by the Neuroeconomics Lab at the Haas School of Business at UC Berkeley on the stereotype content model.
+You need to download magnitude file for keyvectors. 
+Magnitude caches and allows keyvectors to loaded a lot faster after a lot of inputs. This is superior to using the regular Google News or Twitter KeyedVectors imo.
+The link to download magnitude files and explanation: https://github.com/plasticityai/magnitude
