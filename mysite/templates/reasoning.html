@@ -1,3 +1,5 @@
+{{test}}
+{{test1}}
 <!doctype html>
 <html lang="en">
   <head>
@@ -26,6 +28,8 @@
     <script>
       function submitForm()
       {
+          // var test = "{{t}}";
+        // alert(test);
         document.form1.submit();
       }
     </script>
@@ -109,7 +113,7 @@
               <button class="btn btn-primary btn-lg" name="button" type="button" onclick="submitForm();" style="margin-left: 15px;margin-right: 15px; height:45px; width:50px ; padding-bottom: 15px">  ?  </button>
               <div class="col-md-4 mb-4">
                 {% for c in result%}
-                  <div class="p-2 mb-2 bg-primary text-white" style = "border-bottom-right-radius: 4.8px; border-bottom-left-radius: 4.8px; border-top-right-radius: 4.8px; border-top-left-radius: 4.8px; height:45px;width:180px">{{c}}</div>
+                  <div class="p-2 mb-2 bg-primary text-white" style = "border-bottom-right-radius: 4.8px; border-bottom-left-radius: 4.8px; border-top-right-radius: 4.8px; border-top-left-radius: 4.8px; height:45px;width:180px"> {{c}} </div>
                 {% endfor %}
               </div>
             </div>
@@ -123,19 +127,25 @@
             <div class="row">
               <div class="col-md-4 mb-3">
                 {% for c in firstSim %}
-                  <input type="text" class="form-control" name="firstSim" placeholder="first" value={{c}} required>
-                  <div class="invalid-feedback">
-                  Valid first name is required.
-                  </div>
+                <textarea name = "firstSim" placeholder = "gold" id = "firstSim" cols="16" rows="2" value = {{c}} required>{{c}}</textarea>
                 {% endfor %}
+                <!--{% for c in firstSim %}-->
+                  <!--<input type="text" class="form-control" name="firstSim" placeholder="first" value= {{c}} required>-->
+                  <!--<div class="invalid-feedback">-->
+                  <!--Valid first name is required.-->
+                  <!--</div>-->
+                <!--{% endfor %}-->
               </div>
               <div class="col-md-4 mb-3">
-                {% for c in secondSim %}
-                  <input type="text" class="form-control" name="secondSim" placeholder="second" value={{c}} required>
-                  <div class="invalid-feedback">
-                  Valid last name is required.
-                  </div>
-                {% endfor %}
+                 {% for c in secondSim %}
+                <textarea name = "secondSim" placeholder = "silver" id = "secondSim" cols="16" rows="2" value = {{c}} required>{{c}}</textarea>
+                 {% endfor %}
+                <!--{% for c in secondSim %}-->
+                  <!--<input type="text" class="form-control" name="secondSim" placeholder="second" value={{c}} required>-->
+                  <!--<div class="invalid-feedback">-->
+                  <!--Valid last name is required.-->
+                  <!--</div>-->
+                <!--{% endfor %}-->
               </div>
               <button class="btn btn-primary btn-lg" name="button3" type="submit" style="margin-left: 15px;margin-right: 15px; height:45px; width:50px ; padding-bottom: 15px">  ?  </button>
               <div class="col-md-4 mb-4">
@@ -197,17 +207,32 @@
            <form method = "POST" action = "/polls/reasoning"> {% csrf_token %}
             <div class="row">
               <div class="col-md-6 mb-3">
+
                 {% if phrase %}
-                  <input type="text" class="form-control" name="phrase" placeholder="phrase" value = {{phrase}} required>
-                  <div class="invalid-feedback">
-                  Valid first name is required.
-                  </div>
+                    <textarea name = "phrase" placeholder = "Nike"  cols="25" rows="2" value = {{phrase}} required>{{c}}</textarea>
                 {% else %}
-                  <input type="text" class="form-control" name="phrase" placeholder="phrase" value = "Nike" required>
-                  <div class="invalid-feedback">
-                  Valid first name is required.
-                  </div>
+                    <textarea name = "phrase" placeholder = "Nike"  cols="25" rows="2" value = "Nike" required>Nike</textarea>
                 {% endif %}
+
+                <!--{% for c in phrase %}-->
+                    <!--{% if phrase %}-->
+                    <!--<textarea name = "phrase" placeholder = "Nike"  value = {{phrase}} required>{{c}}</textarea>-->
+                    <!--{% else %}-->
+                    <!--<textarea name = "phrase" placeholder = "Nike"  value = "Nike" required></textarea>-->
+                    <!--{% endif %}-->
+                <!--{% endfor %}-->
+
+                <!--{% if phrase %}-->
+                  <!--<input type="text" class="form-control" name="phrase" placeholder="phrase" value = {{phrase}} required>-->
+                  <!--<div class="invalid-feedback">-->
+                  <!--Valid first name is required.-->
+                  <!--</div>-->
+                <!--{% else %}-->
+                  <!--<input type="text" class="form-control" name="phrase" placeholder="phrase" value = "Nike" required>-->
+                  <!--<div class="invalid-feedback">-->
+                  <!--Valid first name is required.-->
+                  <!--</div>-->
+                <!--{% endif %}-->
               </div>
               <div class="col-md-2 mb-3">
                 {% for c in number2 %}
