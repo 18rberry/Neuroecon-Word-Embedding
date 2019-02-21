@@ -10,10 +10,6 @@ import random
 from django.template.response import TemplateResponse
 from django.shortcuts import render
 from django.template import RequestContext
-# from glove import Corpus, Glove
-# from gensim.scripts.glove2word2vec import glove2word2vec
-
-#include below 2 lines for runtime error/ backend
 import matplotlib as mpl
 mpl.use('TkAgg')
 import matplotlib.pyplot as plt
@@ -26,7 +22,6 @@ import cgi
 import spacy
 import numpy as np
 from pymagnitude import *
-from .models import gameData
 from django.utils.safestring import mark_safe
 from django.template import Library
 import json
