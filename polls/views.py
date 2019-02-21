@@ -140,10 +140,6 @@ def extract_list(dictionary):
         list.append(vector)
     return list
 
-dict_test = {}
-dict_test['hello'] = 12
-dict_test['what'] = 25
-
 def graph(request):
     # if statement required to load the page when no input has been typed in box
     # brands = (request.POST['brand_list_input']).split('\r\n')
