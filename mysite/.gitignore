@@ -1,0 +1,4 @@
+*.magnitude
+*.bin
+__pycache__/
+-.gitignore
