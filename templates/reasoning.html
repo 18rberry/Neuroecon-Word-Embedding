@@ -75,38 +75,33 @@
           <form method = "POST" action = "/reasoning" name="form1"> {% csrf_token %}
             <div class="row">
               <div class="col-md-4 mb-3">
-                {% for c in first %}
-                  <input type="text" class="form-control" name="first" placeholder="first" value={{c}} required>
-                  <div class="invalid-feedback">
-                  Valid first name is required.
-                  </div>
-                {% endfor %}
+                <input type="text" class="form-control" name="analogy1" placeholder="analogy1" value={{analogy1}} required>
+                <div class="invalid-feedback">
+                Valid first name is required.
+                </div>
               </div>
               <p> is to </p>
               <div class="col-md-4 mb-3">
-                {% for c in second %}
-                  <input type="text" class="form-control" name="second" placeholder="second" value={{c}} required>
+                  <input type="text" class="form-control" name="analogy2" placeholder="analogy2" value={{analogy2}} required>
                   <div class="invalid-feedback">
                   Valid last name is required.
                   </div>
-                {% endfor %}
               </div>
               <p> as </p>
               <div class="col-md-4 mb-3">
-                {% for c in third %}
-                  <input type="text" class="form-control" name="third" placeholder="third" value={{c}} required>
+                  <input type="text" class="form-control" name="analogy3" placeholder="analogy3" value={{analogy3}} required>
                   <div class="invalid-feedback">
                   Valid first name is required.
                   </div>
-                {% endfor %}
               </div>
+              <input type="text" class="form-control" name="type" value="analogy" style="display:none;">
               <p> is to </p>
               <button class="btn btn-primary btn-lg" name="button" type="button" onclick="submitForm();" style="margin-left: 15px;margin-right: 15px; height:45px; width:50px ; padding-bottom: 15px">  ?  </button>
+              {% if analogy_result %}
               <div class="col-md-4 mb-4">
-                {% for c in result%}
-                  <div class="p-2 mb-2 bg-primary text-white" style = "border-bottom-right-radius: 4.8px; border-bottom-left-radius: 4.8px; border-top-right-radius: 4.8px; border-top-left-radius: 4.8px; height:45px;width:180px"> {{c}} </div>
-                {% endfor %}
+                  <div class="p-2 mb-2 bg-primary text-white" style = "border-bottom-right-radius: 4.8px; border-bottom-left-radius: 4.8px; border-top-right-radius: 4.8px; border-top-left-radius: 4.8px; height:45px;width:180px"> {{analogy_result}} </div>
               </div>
+              {% endif %}
             </div>
             <br>
           </form>
@@ -115,24 +110,21 @@
           <h4 class="mb-3" style = "font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif; font-size: 25px"> Similarity </h4>
           <p style = "font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif; font-size: 16px"> Finds the Cosine Similarity Between 2 Words </p>
           <form method = "POST" action = "/reasoning"> {% csrf_token %}
+            <input type="text" class="form-control" name="type" value="similarity" style="display:none;">
             <div class="row">
               <div class="col-md-4 mb-3">
-                {% for c in firstSim %}
-                <textarea name = "firstSim" placeholder = "gold" id = "firstSim" cols="16" rows="2" value = {{c}} required>{{c}}</textarea>
-                {% endfor %}
-                <!--{% for c in firstSim %}-->
-                  <!--<input type="text" class="form-control" name="firstSim" placeholder="first" value= {{c}} required>-->
+                <textarea name = "similarity1" placeholder = "gold" id = "similarity1" cols="16" rows="2" value = {{similarity1}} required>{{similarity1}}</textarea>
+                <!--{% for c in similarity1 %}-->
+                  <!--<input type="text" class="form-control" name="similarity1" placeholder="first" value= {{c}} required>-->
                   <!--<div class="invalid-feedback">-->
                   <!--Valid first name is required.-->
                   <!--</div>-->
                 <!--{% endfor %}-->
               </div>
               <div class="col-md-4 mb-3">
-                 {% for c in secondSim %}
-                <textarea name = "secondSim" placeholder = "silver" id = "secondSim" cols="16" rows="2" value = {{c}} required>{{c}}</textarea>
-                 {% endfor %}
-                <!--{% for c in secondSim %}-->
-                  <!--<input type="text" class="form-control" name="secondSim" placeholder="second" value={{c}} required>-->
+                <textarea name = "similarity2" placeholder = "silver" id = "similarity2" cols="16" rows="2" value = {{similarity2}} required>{{similarity2}}</textarea>
+                <!--{% for c in similarity2 %}-->
+                  <!--<input type="text" class="form-control" name="similarity2" placeholder="second" value={{c}} required>-->
                   <!--<div class="invalid-feedback">-->
                   <!--Valid last name is required.-->
                   <!--</div>-->
@@ -140,7 +132,7 @@
               </div>
               <button class="btn btn-primary btn-lg" name="button3" type="submit" style="margin-left: 15px;margin-right: 15px; height:45px; width:50px ; padding-bottom: 15px">  ?  </button>
               <div class="col-md-4 mb-4">
-                {% for c in result5%}
+                {% for c in similarity_results%}
                   <div class="p-2 mb-2 bg-primary text-white" style = "border-bottom-right-radius: 4.8px; border-bottom-left-radius: 4.8px; border-top-right-radius: 4.8px; border-top-left-radius: 4.8px; height:45px;width:160px">{{c}}</div>
                 {% endfor %}
               </div>
@@ -158,31 +150,28 @@
           <h4 class="mb-3" style = "font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif; font-size: 25px"> Top-N Similar Words </h4>
           <p style = "font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif; font-size: 16px"> Finds Most Similar Words (Number of Results is Adjustable) </p>
           <form method = "POST" action = "/reasoning"> {% csrf_token %}
+            <input type="text" class="form-control" name="type" value="topn_similar" style="display:none;">
             <div class="row">
               <div class="col-md-6 mb-3">
-                {% for c in similarity %}
-                  <input type="text" class="form-control" name="similarity" placeholder="similarity" value={{c}} required>
-                  <div class="invalid-feedback">
-                  Valid first name is required.
-                  </div>
-                {% endfor %}
+                <input type="text" class="form-control" name="topn_sim" placeholder="topn_sim" value={{topn_sim}} required>
+                <div class="invalid-feedback">
+                Valid first name is required.
+                </div>
               </div>
               <div class="col-md-2 mb-3">
-                {% for c in number %}
-                  <input type="text" class="form-control" name="number" placeholder="#" value={{c}} required>
+                  <input type="text" class="form-control" name="topn_count" placeholder="#" value={{topn_count}} required>
                   <div class="invalid-feedback">
                   Valid first name is required.
                   </div>
-                {% endfor %}
               </div>
               <button class="btn btn-primary btn-lg" name="button1" type="submit" style="height:45px;width:50px; padding-bottom: 15px">  ?  </button>
               <div class="col-md-3 mb-3">
-                {% for c in result2%} 
+                {% for c in topn_words%} 
                   <div class="p-2 mb-2 bg-primary text-white" style = "border-bottom-right-radius: 4.8px; border-bottom-left-radius: 4.8px; border-top-right-radius: 4.8px; border-top-left-radius: 4.8px; width:190px">{{c}}</div>
                 {% endfor %}
               </div>
               <div class="col-md-2 mb-3">
-                {% for c in result3%}
+                {% for c in topn_sims%}
                   <div class="p-2 mb-2 bg-primary text-white" style = "border-bottom-right-radius: 4.8px; border-bottom-left-radius: 4.8px; border-top-right-radius: 4.8px; border-top-left-radius: 4.8px; margin-left: 50px; width: 60px">{{c}}</div>
                 {% endfor %}
               </div>
@@ -193,40 +182,34 @@
           
         </div>
         <div class="col-md-6">
-          <h4 class="mb-3" style = "font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif; font-size: 25px"> Adjectives (Long-Load Time)</h4>
+          <h4 class="mb-3" style = "font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif; font-size: 25px">Descriptive Adjectives</h4>
           <p style = "font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif; font-size: 16px"> Finds Most Descriptive Adjectives (Number of Results is Adjustable) </p>
            <form method = "POST" action = "/reasoning"> {% csrf_token %}
+            <input type="text" class="form-control" name="type" value="adjectives" style="display:none;">
             <div class="row">
               <div class="col-md-6 mb-3">
-                {% if phrase %}
-                  <input type="text" class="form-control" name="phrase" placeholder="phrase" value = {{phrase}} required>
+                {% if adj_phrase %}
+                  <input type="text" class="form-control" name="adj_phrase" placeholder="{{adj_phrase}}" value = {{adj_phrase}} required>
                   <div class="invalid-feedback">
                   Valid first name is required.
                   </div>
                 {% else %}
-                  <input type="text" class="form-control" name="phrase" placeholder="phrase" value = "Nike" required>-->
+                  <input type="text" class="form-control" name="adj_phrase" placeholder="Nike" value = "Nike" required>
                   <div class="invalid-feedback">
                   Valid first name is required.
                   </div>
                 {% endif %}
               </div>
               <div class="col-md-2 mb-3">
-                {% for c in number2 %}
-                  <input type="text" class="form-control" name="number2" placeholder="#" value={{c}} required>
+                  <input type="text" class="form-control" name="adj_count" placeholder="#" value={{adj_count}} required>
                   <div class="invalid-feedback">
                   Valid first name is required.
                   </div>
-                {% endfor %}
               </div>
               <button class="btn btn-primary btn-lg" name="button2" type="submit" style="height:45px;width:50px; padding-bottom: 15px">  ?  </button>
               <div class="col-md-3 mb-3">
-                {% for c in resultPhrase2%}
+                {% for c in adj_results%}
                   <div class="p-2 mb-2 bg-primary text-white" style = "border-bottom-right-radius: 4.8px; border-bottom-left-radius: 4.8px; border-top-right-radius: 4.8px; border-top-left-radius: 4.8px;width:190px">{{c}}</div>
-                {% endfor %}
-              </div>
-              <div class="col-md-2 mb-2">
-                {% for c in resultPhrase3%}
-                  <div class="p-2 mb-3 bg-primary text-white" style = "border-bottom-right-radius: 4.8px; border-bottom-left-radius: 4.8px; border-top-right-radius: 4.8px; border-top-left-radius: 4.8px; margin-left: 50px; width:60px">{{c}}</div>
                 {% endfor %}
               </div>
             </div>

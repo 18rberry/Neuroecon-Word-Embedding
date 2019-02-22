@@ -53,54 +53,40 @@ def index(request):
 
 def reasoning(request):
     # retrieves input information from frontend
-    first      = reformat(request.POST.get("first"))
-    second     = reformat(request.POST.get("second"))
-    third      = reformat(request.POST.get("third"))
-    similarity = reformat(request.POST.get("similarity"))
-    phrase     = reformat(request.POST.get("phrase"))
-    firstSim   = request.POST.get("firstSim")
-    secondSim  = request.POST.get("secondSim")
+    analogy1 = reformat(request.POST.get("analogy1", 'man'))
+    analogy2 = reformat(request.POST.get("analogy2", 'king'))
+    analogy3 = reformat(request.POST.get("analogy3", 'woman'))
+    topn_sim = reformat(request.POST.get("topn_sim", 'boy'))
+    phrase     = reformat(request.POST.get("phrase", 'Nike'))
+    similarity1 = request.POST.get("similarity1", 'silver')
+    similarity2 = request.POST.get("similarity2", 'gold')
+    topn_count = int(request.POST.get("topn_count", 10))
+    adj_count  = int(request.POST.get("adj_count",  10))
 
+    request_type = request.POST.get('type')
     # Handle number conversions
-    number     = request.POST.get("number")
-    number2    = request.POST.get("number2")
-    number     = int(number)  if number  else 2
-    number2    = int(number2) if number2 else 2
-
-    # Default render params
-    defaults = {
-        'first'     : [first      or 'man'   ], 
-        'second'    : [second     or 'king'  ], 
-        'third'     : [third      or 'woman' ], 
-        'similarity': [similarity or 'boy'   ], 
-        'number'    : [number     or  2      ], #These or's aren't needed
-        'number2'   : [number2    or  2      ], #But I wanted stuff to line up
-        'firstSim'  : [firstSim   or 'gold'  ],
-        'secondSim' : [secondSim  or 'silver'],
-        'phrase'    : phrase     or 'Nike'     #Odd one out : (
-    }
 
     # Analogies
-    if first:
+    if request_type == 'analogy':
         result = model.most_similar_cosmul(
-            positive=[second, third],
-            negative=[first],
+            positive=[analogy2, analogy3],
+            negative=[analogy1],
             topn=1
         )
-        defaults['result'] = [result[0][0]]
-        return render(request, 'reasoning.html', defaults)
+        analogy_result = result[0][0]
+        return render(request, 'reasoning.html', locals())
 
     # Top-N Similar Words
-    if similarity:
-        result = model.most_similar(similarity, topn=number)
-        defaults['result2'], defaults['result3'] = [], []
+    if request_type == 'topn_similar':
+        result = model.most_similar(topn_sim, topn=topn_count)
+        topn_words, topn_sims = [], []
         for word, cos_sim in result:
-            defaults['result2'].append(word)
-            defaults['result3'].append(round(cos_sim, 3))
-        return render(request, 'reasoning.html', defaults)
+            topn_words.append(word)
+            topn_sims.append(round(cos_sim, 3))
+        return render(request, 'reasoning.html', locals())
 
     # Adjectives
-    if phrase:
+    if request_type == 'adjectives':
         phrase_vec = model.query(phrase)
         adj_list = list(adj_map)
         adj_list.sort(
@@ -110,21 +96,20 @@ def reasoning(request):
             )[0][0],
             reverse = True
         )
-        defaults['resultPhrase2'] = adj_list[:number2]
-        return render(request, 'reasoning.html', defaults)
+        adj_results = adj_list[:adj_count]
+        return render(request, 'reasoning.html', locals())
 
     # Similarity
-    if firstSim:
-        list1 = list(map(reformat,  firstSim.splitlines()))
-        list2 = list(map(reformat, secondSim.splitlines()))
-        result = [
+    if request_type == 'similarity':
+        list1 = list(map(reformat,  similarity1.splitlines()))
+        list2 = list(map(reformat, similarity2.splitlines()))
+        similarity_results = [
             round(model.similarity(a,b), 8) for a,b in zip(list1, list2)
         ]
-        defaults['result5'] = result
-        return render(request, 'reasoning.html', defaults)
+        return render(request, 'reasoning.html', locals())
 
     # If regular page load, just pass plain defaults
-    return render(request, 'reasoning.html', defaults)
+    return render(request, 'reasoning.html', locals())
 
 def to_vector_dict(labels):
     result = OrderedDict()
