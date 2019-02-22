@@ -234,8 +234,7 @@
 
 
     <script>
-
-
+      var input_box = document.getElementById("brand_list_input");
       function resetZoom() {
         window.scatterChart.resetZoom()
       }
@@ -348,6 +347,7 @@
         // alert(l);
 
         var labels = ["McDonalds", "Burger King", "KFC","Subway","Taco Bell","Dairy Queen","Dunkin Donuts","Starbucks","Domino Pizza","Panera Bread","Arby","Chipotle","Pizza Hut","Chick-fil-a","Hardee","Popeyes","Whataburger","Quiznos","Zaxby","Steak-n-Shake","Qdoba","Panda Express","Del Taco","Krispy Kreme","Baskin Robbins"];
+        input_box.innerHTML = labels.join('\n');
         <!-- Graph values for fastfood PCA graph -->
         var xValues = [-1.1042898, -0.5712064, -0.28845784, -0.7593872, 0.048091207, -0.51660913, -1.0142229, -1.54874,
           -0.20078418, -0.6859127, 0.3725226, 0.059406217, -0.19539063, 1.596197, 0.5404424, 1.7007602, 1.5751078, 
@@ -383,6 +383,7 @@
 
         var labels = ["Acura", "Audi", "Bentley", "Bmw", "Buick", "Cadillac","Chevrolet", "Chrysler", "Dodge", "Ferrari", "Fiat", "Ford", "GMC", "Honda", "Hyundai", "Infiniti", "Jaguar", "Jeep", "KIA", "Lamborghini", "Lexus", "Maserati", "Mazda", "Mercedes", "Nissan", "Porsche", "Rolls-Royce", "Subaru", "Tesla", "Toyota", 
           "Volkswagen", "Volvo"];
+        input_box.innerHTML = labels.join('\n');
 
         var xValues = [1.4277729, -1.9036939, -1.4916731, -1.6212829, 3.4473636, 0.9953971, 1.8145581, 1.8386742, 
           2.3784685, -2.8656635, -0.6513348, 0.35646433, 3.1016068, 0.59129745, 0.5647436, -0.30317864, -0.9661615,
@@ -418,6 +419,7 @@
         "Dodge", "Ferrari", "Fiat", "Ford", "GMC", "Honda", "Hyundai", "Infiniti", "Jaguar", "Jeep", "KIA", "Lamborghini",
         "Lexus", "Maserati", "Mazda", "Mercedes_Benz", "Nissan", "Porsche", "Rolls_Royce", "Subaru", "Tesla", "Toyota", 
         "Volkswagen", "Volvo"];
+        input_box.innerHTML = labels.join('\n');
 
         var xValues = [-0.7070878, 1.9227946, 0.67411065, 0.33882862, 0.46478337, -1.1014427, -0.4958454, -1.0670923, 
           -0.39355105, -0.8741402, 1.6263882, 1.0783498, -0.39711177, -0.87203157, -0.49128622, -0.8431094, -0.37398753,
@@ -454,6 +456,7 @@
               "Haribos", "Gushers", "Smarties", "Airheads", "Milkyways",
               "Jellybeans", "Lifesavers", "Warheads", "Jolly Ranchers", "Lollipops",
               "Frooties", "Taffy"];
+        input_box.innerHTML = labels.join('\n');
 
         var xValues = [2.2801337, 3.397263, 3.0700855, 0.008468798, -1.1018296, -0.09850468, 2.4154317, 2.5268073,
           0.12803544, -2.4037893, -1.2702489, -2.398203, 0.4150689, -2.0784297, 1.6962181, -0.2415381, -1.9389688,
@@ -483,6 +486,7 @@
         }  
 
         var labels = ["Beyonce","Rihanna", "Nicki Minaj", "Eminem", "Justin Timberlake", "Jayz", "Drake", "Kendrick Lamar", "Macklemore", "Justin Beiber", "Wiz Khalifa", "Kid Cudi", "Kanye", "Chris Brown", "Ed Sheeran", "Taylor Swift", "Coldplay", "Bruno Mars", "Zayn", "Aerosmith", "Avicii", "Adele","Bastille", "Lumineers", "Skrillex", "Selena Gomez", "Demi Lovato", "Lorde","Katy Perry", "Akon", "Zedd", "Timbaland", "Maroon 5", "Alesso", "The Weeknd", "Childish Gambino", "Ellie Goulding", "One Republic"];
+        input_box.innerHTML = labels.join('\n');
 
         var xValues = [2.016291, 2.5234513, 2.1174521, 0.571119, 1.1303185, -0.89346266, 1.0089182, -1.3075995, 0.05144794, 1.2842094, -0.68653727, -2.5365624, 0.37201297, -0.99494684, 1.7979553, 2.9758928, -0.21160017, 1.3835036, 
           4.0746007, -1.1435302, -2.1752453, 1.6402328, -1.7425392, -1.9762518, -1.5470412, 4.4014473, 3.2648304, 
@@ -515,6 +519,7 @@
         var labels = ["Computer Science", "Electrical Engineering", "Mechanical Engineering", "Chemical Engineering", "Mathematics", "Economics", "Physics", "Chemistry", "Biology", "Psychology", "Philosophy", "Political Science", "Biochemistry", "Cognitive Science", "Sociology", "Religious Studies", "Linguistics", "Gender Studies",
           "Comparative Literature", "Anthropology", "Africana Studies", "Fine Arts", "Criminology", "Biophysics", 
           "Performing Arts", "Visual Arts"];
+        input_box.innerHTML = labels.join('\n');
 
         var xValues = [0.82076514, 1.6711029, 1.8071384, 1.5530581, 0.079056114, 0.07144773, 1.0078574, 0.98207814,
           0.5548702, 0.25038993, -0.31710154, -0.28138128, 1.3077836, 0.029677106, -0.2972074, -1.1053838, -0.31146488,
