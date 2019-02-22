@@ -14,6 +14,9 @@
 
     <!-- Custom styles for this template -->
     <link href="../../static/css/starter-template.css" rel="stylesheet">
+
+    <!-- refresh icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   </head>
 
   <body>
@@ -41,7 +44,7 @@
     <main role="main" class="container" style = "border-bottom-right-radius: 8px; border-bottom-left-radius: 8px; border-top-right-radius: 8px; border-top-left-radius: 8px;">
       <div class="text-center">
         <!-- TITLE -->
-        <h2 style='margin-top: 15px; font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif; font-size: 40px'>PCA Graph | Perceptual Maps</h2>
+        <h2 style='margin-top: 15px; font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif; font-size: 40px'>PCA Graphs | Perceptual Maps</h2>
         <br>
         <!-- Subtitle-->
         <h7 style="color: rgba(51, 182, 233); font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif;font-size: 20px">Pre-Loaded Examples</h7>
@@ -65,13 +68,10 @@
                   <!-- Change "click button below" to "insert list of words below"-->
             <h5 style="margin-left: 15px;margin-bottom: 20px;font-weight: 90; font-family: Museo-Sans,Helvetica,Arial,sans-serif;font-size: 25px">Insert List of Brands/Categories:</h5>
             </div>
-
-                   <form method="POST"  action = "/graph" > {% csrf_token %}
-                     <textarea name="brand_list_input" placeholder = "Separate brands by newline" id = "brand_list_input" style="width:100%;" rows="10"></textarea>
-                     <br>
-                      <input type="button" value="Graph" onclick = "getText()" id = "graphID" />
-
-                  </form>
+                 <textarea name="brand_list_input" placeholder = "Separate brands by newline" id = "brand_list_input" style="width:100%;" rows="10"></textarea>
+                  <button onclick="getText()" id="graphButton">
+                    Graph
+                  </button>
 
 
             </div>
@@ -188,8 +188,7 @@
       <footer class="pt-4 my-md-5 pt-md-5 border-top">
         <div class="row">
           <div class="col-12 col-md">
-            <img class="mb-2" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="24" height="24">
-            <small class="d-block mb-3 text-muted">&copy; 2018 || EZ</small>
+            <small class="d-block mb-3 text-muted">&copy; 2019 || EZ || CZ || CW</small>
           </div>
           <div class="col-6 col-md">
             <h5>Additional Features</h5>
@@ -241,6 +240,10 @@
       var pc3 = document.getElementById("3P");
       var pc4 = document.getElementById("4P");
 
+      var graph_button = document.getElementById("graphButton");
+
+      var occupied = false;
+
       function resetZoom() {
         window.scatterChart.resetZoom()
       }
@@ -262,10 +265,18 @@
       }
 
       function getText() {
+        if (occupied) {
+          alert('Please wait for your previous input to be processed.');
+          return;
+        }
+        occupied = true;
+        graph_button.innerHTML = '<i class="fa fa-refresh fa-spin"></i> Processing...';
         var text = input_box.value;
         var query_labels = text.split(/\r?\n/).join(',');
         fetch(`/api/graph?labels=${query_labels}&n_components=4`)
           .then(function(response) {
+            occupied = false;
+            graph_button.innerHTML = 'Graph'
             return response.json();
           })
           .then(function(jsonResponse) {
