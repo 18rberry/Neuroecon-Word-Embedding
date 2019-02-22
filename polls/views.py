@@ -40,6 +40,7 @@ def js(obj):
     return mark_safe(json.dumps(obj))
 
 def reformat(s):
+    s = s.replace('-', ' ')
     return '_'.join(s.split()) if s else ''
 
 def index(request):
@@ -120,46 +121,28 @@ def reasoning(request):
     # If regular page load, just pass plain defaults
     return render(request, 'reasoning.html', defaults)
 
-def vector_array(brand_vectors):
+def to_vector_dict(labels):
     result = {}
-    for i in brand_vectors:
-        i = i.replace(" ", "_").replace('-', '_')
-        if i in model:
-            result[i] = model.query(i)
-        else:
-            result[i] = np.array([0] * 300)
+    for label in labels:
+        label = reformat(label)
+        if label in model:
+            result[label] = model.query(label)
             #if brand name is something like "taco bell" or "Taco Bell": try "Taco_Bell"
             #this applies to two word brands only
     return result
 
-
-
-def extract_list(dictionary):
-    list = []
-    for word, vector in dictionary.items():
-        list.append(vector)
-    return list
-
 def graph(request):
-    # if statement required to load the page when no input has been typed in box
-    # brands = (request.POST['brand_list_input']).split('\r\n')
-    brands = ['hello', 'McDonalds', 'bye']
+    # Debateably we should move all of this to an API
+    brand_input = request.POST.get('brand_list_input')
+    brands = brand_input.splitlines() if brand_input else ['hello', 'bye']
 
-    # brands is the list of brands and labels from user input
-    if (request.POST.get('brand_list_input') != None):
-        brands = (request.POST.get('brand_list_input')).splitlines()
-    # for testing purposes
-    else:
-        brands = ["hello", 'cya']
     # single_wv is a dictionary whose keys are brands and values are 2 xy PCA coord lists'
     single_wv = {}
     master_dict = {}
 
     # creates a dictionary brand_dict: brands, with their word vectors
-    brand_dict = vector_array(brands)
-    print(list(brand_dict))
-    brand_array = np.array([v for k,v in brand_dict.items()])
-    print(len(brand_array))
+    brand_dict = to_vector_dict(brands)
+    brand_array = np.array(list(brand_dict.values()))
     pca = PCA(n_components=2)
 
     # pca matrix for 2 component PCA on list brands
@@ -173,20 +156,17 @@ def graph(request):
         master_dict['vari1'] = variance1
         master_dict['vari2'] = variance2
         master_dict['vartot'] = vartotal
-
     except IndexError:
         pass
 
-    for number, label in enumerate(brand_dict):
-        single_wv[label] = pca_matrix[number]
+    for index, label in enumerate(brand_dict):
+        single_wv[label] = pca_matrix[index]
     # wv_list is a list
     for index, label in enumerate(single_wv):
         key = "x" + str(index)
         master_dict[key] = single_wv[label]
 
     master_dict['labs'] = brands
-
-
     return render(request, 'graph.html', master_dict)
 
 def result(request):
