@@ -207,32 +207,17 @@
            <form method = "POST" action = "/reasoning"> {% csrf_token %}
             <div class="row">
               <div class="col-md-6 mb-3">
-
                 {% if phrase %}
-                    <textarea name = "phrase" placeholder = "Nike"  cols="25" rows="2" value = {{phrase}} required>{{phrase}}</textarea>
+                  <input type="text" class="form-control" name="phrase" placeholder="phrase" value = {{phrase}} required>
+                  <div class="invalid-feedback">
+                  Valid first name is required.
+                  </div>
                 {% else %}
-                    <textarea name = "phrase" placeholder = "Nike"  cols="25" rows="2" value = "Nike" required>Nike</textarea>
+                  <input type="text" class="form-control" name="phrase" placeholder="phrase" value = "Nike" required>-->
+                  <div class="invalid-feedback">
+                  Valid first name is required.
+                  </div>
                 {% endif %}
-
-                <!--{% for c in phrase %}-->
-                    <!--{% if phrase %}-->
-                    <!--<textarea name = "phrase" placeholder = "Nike"  value = {{phrase}} required>{{c}}</textarea>-->
-                    <!--{% else %}-->
-                    <!--<textarea name = "phrase" placeholder = "Nike"  value = "Nike" required></textarea>-->
-                    <!--{% endif %}-->
-                <!--{% endfor %}-->
-
-                <!--{% if phrase %}-->
-                  <!--<input type="text" class="form-control" name="phrase" placeholder="phrase" value = {{phrase}} required>-->
-                  <!--<div class="invalid-feedback">-->
-                  <!--Valid first name is required.-->
-                  <!--</div>-->
-                <!--{% else %}-->
-                  <!--<input type="text" class="form-control" name="phrase" placeholder="phrase" value = "Nike" required>-->
-                  <!--<div class="invalid-feedback">-->
-                  <!--Valid first name is required.-->
-                  <!--</div>-->
-                <!--{% endif %}-->
               </div>
               <div class="col-md-2 mb-3">
                 {% for c in number2 %}
