@@ -40,8 +40,7 @@ def js(obj):
     return mark_safe(json.dumps(obj))
 
 def reformat(s):
-    s = s.replace('-', ' ')
-    return '_'.join(s.split()) if s else ''
+    return '_'.join(s.replace('-', ' ').split()) if s else ''
 
 def index(request):
     return render(request, 'index.html')
