@@ -2,9 +2,11 @@
 from django.shortcuts import render
 from django.utils.safestring import mark_safe
 from django.template import Library
+from django.http import JsonResponse
 from pymagnitude import *
 from sklearn.decomposition import PCA
 from sklearn.metrics.pairwise import cosine_similarity
+from collections import OrderedDict
 import numpy as np
 import json
 import pickle
@@ -121,14 +123,14 @@ def reasoning(request):
     return render(request, 'reasoning.html', defaults)
 
 def to_vector_dict(labels):
-    result = {}
+    result = OrderedDict()
     for label in labels:
-        label = reformat(label)
-        if label in model:
-            result[label] = model.query(label)
+        clean_label = reformat(label)
+        if clean_label in model:
+            result[label] = model.query(clean_label)
             #if brand name is something like "taco bell" or "Taco Bell": try "Taco_Bell"
             #this applies to two word brands only
-    return result
+    return list(result), list(result.values())
 
 
 def graph(request):
@@ -141,8 +143,7 @@ def graph(request):
     master_dict = {}
 
     # creates a dictionary brand_dict: brands, with their word vectors
-    brand_dict = to_vector_dict(brands)
-    brand_array = np.array(list(brand_dict.values()))
+    brands, brand_array = to_vector_dict(brands)
     pca = PCA(n_components=2)
 
     # pca matrix for 2 component PCA on list brands
@@ -159,7 +160,7 @@ def graph(request):
     except IndexError:
         pass
 
-    for index, label in enumerate(brand_dict):
+    for index, label in enumerate(brands):
         single_wv[label] = pca_matrix[index]
     # wv_list is a list
     for index, label in enumerate(single_wv):
@@ -168,3 +169,37 @@ def graph(request):
 
     master_dict['labs'] = brands
     return render(request, 'graph.html', master_dict)
+
+def graph_api(request):
+    labels = request.GET.get('labels', '').split(',')
+    print(labels)
+    n_components = int(request.GET.get('n_components', 2))
+    labels, vectors = to_vector_dict(labels)
+    if len(labels) < n_components:
+        print('meow')
+        print(n_components)
+        return JsonResponse({'success': False})
+    pca = PCA(n_components=n_components)
+    pca_matrix = pca.fit_transform(vectors)
+    variance = pca.explained_variance_ratio_
+    result = OrderedDict()
+    result['success'] = True
+    result['variance'] = list(variance)
+
+    # Points
+    points = OrderedDict()
+    for i, label in enumerate(labels):
+        points[label] = list(pca_matrix[i])
+    result['points'] = points
+
+    # Axis labels
+    axis_labels = []
+    for axis in pca.components_:
+        label_dict = OrderedDict()
+        for word, vec in model.most_similar(axis, topn=20):
+            label_dict[word] = vec
+        axis_labels.append(label_dict)
+    result["axis_labels"] = axis_labels
+    from pprint import pprint
+    pprint(result)
+    return JsonResponse(result)
