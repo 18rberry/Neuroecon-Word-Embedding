@@ -14,8 +14,13 @@ import os
 
 # Descriptive Adjectives caching
 SKIP_CACHING = False
-model = Magnitude("GoogleNews-vectors-negative300.magnitude")
-adj_cache_path = 'adj_cache.pickle'
+data_path = os.path.join('.', 'data')
+vector_path = os.path.join(data_path, 'vectors')
+model = Magnitude(
+    os.path.join(vector_path, "GoogleNews-vectors-negative300.magnitude")
+)
+adj_cache_path = os.path.join(data_path, 'adj_cache.pickle')
+adj_list_path  = os.path.join(data_path, 'adjectives.txt')
 
 if SKIP_CACHING:
     print('Skipping adjective cache. Adjectives will be disabled.')
@@ -24,7 +29,7 @@ elif os.path.exists(adj_cache_path):
         adj_map = pickle.load(f) 
 else:
     print('Caching adjectives. This will take a few seconds...')
-    with open('adjectives.txt', 'rt') as f:
+    with open(adj_list_path, 'rt') as f:
         adj_map = {}
         for i, adj in enumerate(f.read().splitlines()):
             adj_map[adj] = model.query(adj)
@@ -35,7 +40,6 @@ else:
         pickle.dump(adj_map, f)
 
 register = Library()
-
 
 @register.filter(is_safe=True)
 def js(obj):
