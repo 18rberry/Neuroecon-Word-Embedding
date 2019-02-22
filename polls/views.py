@@ -130,6 +130,7 @@ def to_vector_dict(labels):
             #this applies to two word brands only
     return result
 
+
 def graph(request):
     # Debateably we should move all of this to an API
     brand_input = request.POST.get('brand_list_input')
@@ -167,86 +168,3 @@ def graph(request):
 
     master_dict['labs'] = brands
     return render(request, 'graph.html', master_dict)
-
-def result(request):
-
-    #if statement required to load the page when no input has been typed in box
-    # brands = (request.POST['brand_list_input']).split('\r\n')
-    # brands = ['hello', 'McDonalds']
-
-    #brands is the list of brands and labels from user input
-    if (request.POST.get('brand_list_input') != None):
-        brands = (request.POST.get('brand_list_input')).split(" ")
-    #for testing purposes
-    else:
-        brands = ["hello"]
-    single_wv = {}
-    master_dict = {}
-
-
-
-    #
-    # # creates a dictionary brand_dict: brands, with their word vectors
-    # brand_dict = vector_array(brands)
-    # brand_array = np.array(extract_list(brand_dict))
-    # pca = PCA(n_components=2)
-    # # pca matrix for 2 component PCA on list brands
-    # pca_matrix = pca.fit_transform(brand_array)
-    #
-    #
-    #
-    # # single_wv is a dictionary whose keys are brands and values are 2 xy PCA coord lists'
-    # length_pca_matrix = len(pca_matrix)
-    # length_single_wv = len(single_wv)
-    # for number, label in enumerate(brand_dict):
-    #     single_wv[label] = pca_matrix[number]
-    # #wv_list is a list
-    # for index, label in enumerate(single_wv):
-    #     key = "x" + str(index)
-    #     master_dict[key] = single_wv[label]
-    #
-    # master_dict['labs'] = brands
-    #
-    #
-    #
-    #
-    #
-    #
-    # num_iters = len(brands)
-    # new_dict = {}
-    # # for i in num_iters:
-    # #     new_dict[i] = single_wv[i]
-    # # new_dict['tt'] = brands
-    # # new_dict['tt2'] = "hello"
-    # # list_test = [1, 2, .5]
-    # # single_digit = 1.5
-    # # value = pca_matrix[1][1]
-    # #first n keys of master_dict = x0, x1 etc. whose values are xy coord pairs
-    # #last key = "labs"
-    #
-
-
-    return render(request, 'result.html', master_dict)
-
-    # return render(request, 'polls/graph.html', {'single_wv': single_wv})
-    #
-    # dict_test = {}
-    # dict_test['hello'] = 12
-    # dict_test['what'] = 25
-    # label = {}
-    # # brands = (request.POST['brand_list_input']).split('\r\n')
-    # dict_test['list'] = ['Acura', 'Honda']
-    # brands = request.POST.get('brand_list_input')
-    # dict_test['yep'] = brands
-    # return render(request, 'graph.html', dict_test)
-
-#receive data from graph.html textbox
-#use this function to apply PCA
-
-
-# def result(request):
-#     brands = request.POST['brand_list_input']
-#     single_wv = model[brands]
-#     for number, label in enumerate(brands):
-#         single_wv[number] = model[label]
-#     return render(request, 'graph/result.html', {'single_wv': single_wv})
