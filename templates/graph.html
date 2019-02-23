@@ -297,7 +297,10 @@
         for (var i = 0; i < labels.length; i++) {
           var label = labels[i];
           var point = data.points[label];
-          addData(myChart, label, {x: point[0], y: point[1]});
+          addData(myChart, label, {
+            x: point[0].toFixed(3),
+            y: point[1].toFixed(3)
+          });
         }
         pc1.innerText = Object.keys(data.axis_labels[0]).join('\n');
         pc2.innerText = Object.keys(data.axis_labels[1]).join('\n');
@@ -306,6 +309,7 @@
 
         variance1.innerText = (data.variance[0] * 100).toFixed(2) + '%';
         variance2.innerText = (data.variance[1] * 100).toFixed(2) + '%';
+        resetZoom();
       }
 
       function fastfood() {
