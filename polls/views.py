@@ -88,15 +88,10 @@ def reasoning(request):
     # Adjectives
     if request_type == 'adjectives':
         phrase_vec = model.query(phrase)
-        adj_list = list(adj_map)
-        adj_list.sort(
-            key = lambda a: cosine_similarity(
-                [adj_map[a]],
-                [phrase_vec]
-            )[0][0],
-            reverse = True
+        adj_results = map(
+            lambda x: x[0],
+            get_descriptive_adjectives(phrase_vec, n=adj_count)
         )
-        adj_results = adj_list[:adj_count]
         return render(request, 'reasoning.html', locals())
 
     # Similarity
@@ -111,6 +106,22 @@ def reasoning(request):
     # If regular page load, just pass plain defaults
     return render(request, 'reasoning.html', locals())
 
+def get_descriptive_adjectives(v, n=30, select=lambda l,n: l[:n]):
+    adj_list = list(map(
+        lambda i: (i[0], cosine_similarity([i[1]], [v])[0][0]),
+        adj_map.items()
+    ))
+    adj_list.sort(
+        key = lambda a: a[1],
+        reverse = True
+    )
+    return select(adj_list, n)
+
+def axis_select(adj_list, n):
+    top = adj_list[:n//2]
+    bot = list(reversed(adj_list[-n//2:]))
+    return top + [('-'*10,0)] + bot
+
 def to_vector_dict(labels):
     result = OrderedDict()
     for label in labels:
@@ -123,51 +134,16 @@ def to_vector_dict(labels):
 
 
 def graph(request):
-    # Debateably we should move all of this to an API
-    brand_input = request.POST.get('brand_list_input')
-    brands = brand_input.splitlines() if brand_input else ['hello', 'bye']
-
-    # single_wv is a dictionary whose keys are brands and values are 2 xy PCA coord lists'
-    single_wv = {}
-    master_dict = {}
-
-    # creates a dictionary brand_dict: brands, with their word vectors
-    brands, brand_array = to_vector_dict(brands)
-    pca = PCA(n_components=2)
-
-    # pca matrix for 2 component PCA on list brands
-    pca_matrix = pca.fit_transform(brand_array)
-
-    variance = pca.explained_variance_ratio_
-    try:
-        variance1 = str((variance[0]*100).round(2)) + "%"
-        variance2 = str((variance[1]*100).round(2)) + "%"
-        vartotal = str(((variance[0] + variance[1])*100).round(2)) + "%"
-        master_dict['vari1'] = variance1
-        master_dict['vari2'] = variance2
-        master_dict['vartot'] = vartotal
-    except IndexError:
-        pass
-
-    for index, label in enumerate(brands):
-        single_wv[label] = pca_matrix[index]
-    # wv_list is a list
-    for index, label in enumerate(single_wv):
-        key = "x" + str(index)
-        master_dict[key] = single_wv[label]
-
-    master_dict['labs'] = brands
-    return render(request, 'graph.html', master_dict)
+    return render(request, 'graph.html')
 
 def graph_api(request):
     labels = request.GET.get('labels', '').split(',')
-    print(labels)
     n_components = int(request.GET.get('n_components', 2))
     labels, vectors = to_vector_dict(labels)
     if len(labels) < n_components:
-        print('meow')
-        print(n_components)
         return JsonResponse({'success': False})
+
+    # Run PCA on vecs
     pca = PCA(n_components=n_components)
     pca_matrix = pca.fit_transform(vectors)
     variance = pca.explained_variance_ratio_
@@ -185,10 +161,10 @@ def graph_api(request):
     axis_labels = []
     for axis in pca.components_:
         label_dict = OrderedDict()
-        for word, vec in model.most_similar(axis, topn=20):
-            label_dict[word] = vec
+        for word, sim in get_descriptive_adjectives(
+            axis, select=axis_select
+        ):
+            label_dict[word] = sim
         axis_labels.append(label_dict)
     result["axis_labels"] = axis_labels
-    from pprint import pprint
-    pprint(result)
     return JsonResponse(result)
