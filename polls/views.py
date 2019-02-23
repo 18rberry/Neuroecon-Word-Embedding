@@ -17,7 +17,7 @@ SKIP_CACHING = False
 data_path = os.path.join('.', 'data')
 vector_path = os.path.join(data_path, 'vectors')
 model = Magnitude(
-    os.path.join(vector_path, "GoogleNews-vectors-negative300.magnitude")
+    os.path.join(vector_path, 'GoogleNews-vectors-negative300.magnitude')
 )
 adj_cache_path = os.path.join(data_path, 'adj_cache.pickle')
 adj_list_path  = os.path.join(data_path, 'adjectives.txt')
@@ -53,15 +53,15 @@ def index(request):
 
 def reasoning(request):
     # retrieves input information from frontend
-    analogy1 = reformat(request.POST.get("analogy1", 'man'))
-    analogy2 = reformat(request.POST.get("analogy2", 'king'))
-    analogy3 = reformat(request.POST.get("analogy3", 'woman'))
-    topn_sim = reformat(request.POST.get("topn_sim", 'boy'))
-    phrase     = reformat(request.POST.get("phrase", 'Nike'))
-    similarity1 = request.POST.get("similarity1", 'silver')
-    similarity2 = request.POST.get("similarity2", 'gold')
-    topn_count = int(request.POST.get("topn_count", 10))
-    adj_count  = int(request.POST.get("adj_count",  10))
+    analogy1    = reformat(request.POST.get('analogy1', 'man'))
+    analogy2    = reformat(request.POST.get('analogy2', 'king'))
+    analogy3    = reformat(request.POST.get('analogy3', 'woman'))
+    topn_sim    = reformat(request.POST.get('topn_sim', 'boy'))
+    phrase      = reformat(request.POST.get('phrase',   'Nike'))
+    similarity1 = request.POST.get('similarity1', 'silver')
+    similarity2 = request.POST.get('similarity2', 'gold')
+    topn_count  = int(request.POST.get('topn_count', 10))
+    adj_count   = int(request.POST.get('adj_count',  10))
 
     request_type = request.POST.get('type')
     # Handle number conversions
@@ -96,7 +96,7 @@ def reasoning(request):
 
     # Similarity
     if request_type == 'similarity':
-        list1 = list(map(reformat,  similarity1.splitlines()))
+        list1 = list(map(reformat, similarity1.splitlines()))
         list2 = list(map(reformat, similarity2.splitlines()))
         similarity_results = [
             round(model.similarity(a,b), 8) for a,b in zip(list1, list2)
@@ -128,8 +128,9 @@ def to_vector_dict(labels):
         clean_label = reformat(label)
         if clean_label in model:
             result[label] = model.query(clean_label)
-            #if brand name is something like "taco bell" or "Taco Bell": try "Taco_Bell"
+            #if brand name is something like 'taco bell' or 'Taco Bell': try 'Taco_Bell'
             #this applies to two word brands only
+            #use itertools.product 
     return list(result), list(result.values())
 
 
@@ -166,5 +167,5 @@ def graph_api(request):
         ):
             label_dict[word] = sim
         axis_labels.append(label_dict)
-    result["axis_labels"] = axis_labels
+    result['axis_labels'] = axis_labels
     return JsonResponse(result)
