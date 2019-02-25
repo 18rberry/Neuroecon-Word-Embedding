@@ -50,7 +50,7 @@ def reasoning(request):
     analogy2    = reformat(request.POST.get('analogy2', 'king'))
     analogy3    = reformat(request.POST.get('analogy3', 'woman'))
     topn_sim    = reformat(request.POST.get('topn_sim', 'boy'))
-    phrase      = reformat(request.POST.get('phrase',   'Nike'))
+    adj_phrase  = reformat(request.POST.get('adj_phrase',   'Nike'))
     similarity1 = request.POST.get('similarity1', 'silver')
     similarity2 = request.POST.get('similarity2', 'gold')
     topn_count  = int(request.POST.get('topn_count', 10))
@@ -80,7 +80,7 @@ def reasoning(request):
 
     # Adjectives
     if request_type == 'adjectives':
-        phrase_vec = model.query(phrase)
+        phrase_vec = model.query(adj_phrase)
         adj_results = map(
             lambda x: x[0],
             get_descriptive_adjectives(phrase_vec, n=adj_count)
