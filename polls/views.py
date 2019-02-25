@@ -1,7 +1,6 @@
 # Create your views here.
 from django.shortcuts import render
 from django.utils.safestring import mark_safe
-from django.template import Library
 from django.http import JsonResponse
 from pymagnitude import *
 from sklearn.decomposition import PCA
@@ -38,12 +37,6 @@ else:
     print('\nFinished caching!') 
     with open(adj_cache_path, 'wb') as f:
         pickle.dump(adj_map, f)
-
-register = Library()
-
-@register.filter(is_safe=True)
-def js(obj):
-    return mark_safe(json.dumps(obj))
 
 def reformat(s):
     return '_'.join(s.replace('-', ' ').split()) if s else ''

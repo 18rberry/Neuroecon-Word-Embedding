@@ -276,7 +276,7 @@
         fetch(`/api/graph?labels=${query_labels}&n_components=4`)
           .then(function(response) {
             occupied = false;
-            graph_button.innerHTML = 'Graph'
+            graph_button.innerHTML = 'Graph';
             return response.json();
           })
           .then(function(jsonResponse) {
