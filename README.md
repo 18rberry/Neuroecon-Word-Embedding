@@ -1,6 +1,14 @@
 # Word Embeddings Site
 Website for interacting with word embedding models
 
+![Example visualization](https://i.imgur.com/FM5AiYi.png)
+
+Performs principle component analysis on corresponding word vectors for user input and plots along PC1 and PC2.
+
+![Principle component descriptive words](https://i.imgur.com/FFl7QGQ.png)
+
+Extracts descriptive adjectives for first four principle components.
+
 # Setup info
 You need to download magnitude file for keyvectors. 
 Magnitude caches and allows keyvectors to loaded a lot faster after a lot of inputs. This is superior to using the regular Google News or Twitter KeyedVectors.
