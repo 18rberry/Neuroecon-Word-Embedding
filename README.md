@@ -1,11 +1,11 @@
 # Word Embeddings Site
 Website for interacting with word embedding models
 
-![Example visualization](https://i.imgur.com/ggtHZ8J.png)
+![Example visualization](https://i.imgur.com/FM5AiYi.png)
 
 Performs principle component analysis on corresponding word vectors for user input and plots along PC1 and PC2.
 
-![Principle component descriptive words](https://i.imgur.com/9fvYQzy.png)
+![Principle component descriptive words](https://i.imgur.com/zqDUyBF.png)
 
 Extracts descriptive adjectives for each four four principle components.
 
