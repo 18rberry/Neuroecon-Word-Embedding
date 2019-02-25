@@ -7,7 +7,7 @@ Performs principle component analysis on corresponding word vectors for user inp
 
 ![Principle component descriptive words](https://i.imgur.com/FFl7QGQ.png)
 
-Extracts descriptive adjectives for each four four principle components.
+Extracts descriptive adjectives for first four principle components.
 
 # Setup info
 You need to download magnitude file for keyvectors. 
