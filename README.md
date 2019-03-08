@@ -16,6 +16,7 @@ The link to download magnitude files and explanation: https://github.com/plastic
 Django will look for this file in the project root as ``GoogleNews-vectors-negative300.magnitude``.
 
 # TODO
+- Fix the graph animations on axis change to have silky smooth animations~
 - Make a new logo for the site (it looks like the current one is for some Norwegian DJ lol)
 - Add ability to download data (CW will probably handle)
 - Separate API endpoint for labeling PCA components from the graphing part (Labeling the PCA components is generally pretty time consuming, people who just want to look at the graph might not care)
