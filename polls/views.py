@@ -6,10 +6,14 @@ from pymagnitude import *
 from sklearn.decomposition import PCA
 from sklearn.metrics.pairwise import cosine_similarity
 from collections import OrderedDict
+from itertools import chain
+from pathos import multiprocessing
 import numpy as np
 import json
 import pickle
 import os
+
+NUM_PROC = multiprocessing.cpu_count()
 
 # Descriptive Adjectives caching
 SKIP_CACHING = False
@@ -100,10 +104,31 @@ def reasoning(request):
     return render(request, 'reasoning.html', locals())
 
 def get_descriptive_adjectives(v, n=30, select=lambda l,n: l[:n]):
-    adj_list = list(map(
-        lambda i: (i[0], cosine_similarity([i[1]], [v])[0][0]),
-        adj_map.items()
-    ))
+
+    # Multiprocessing magic
+    def mp_iter():
+        items = list(adj_map.items())
+        curr, step = 0, (len(items) // NUM_PROC) + 1
+        for _ in range(NUM_PROC):
+            yield items[curr:curr+step]
+            curr += step
+
+    def mp_helper(items):
+        adj_list = list(map(
+            lambda i: (i[0], cosine_similarity([i[1]], [v])[0][0]),
+            items
+        )) # This operation is very expensive, so we parallelize it
+        adj_list.sort(
+            key = lambda a: a[1],
+            reverse = True
+        ) # Might as well do some sorting while we're here too
+        return select(adj_list, n)
+    
+    results = pool.imap_unordered(
+        mp_helper,
+        mp_iter()
+    )
+    adj_list = list(chain(*results))
     adj_list.sort(
         key = lambda a: a[1],
         reverse = True
@@ -162,3 +187,5 @@ def graph_api(request):
         axis_labels.append(label_dict)
     result['axis_labels'] = axis_labels
     return JsonResponse(result)
+
+pool = multiprocessing.Pool(NUM_PROC)
