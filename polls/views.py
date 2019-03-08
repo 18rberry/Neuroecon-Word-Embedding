@@ -104,7 +104,6 @@ def reasoning(request):
     return render(request, 'reasoning.html', locals())
 
 def get_descriptive_adjectives(v, n=30, select=lambda l,n: l[:n]):
-
     # Multiprocessing magic
     def mp_iter():
         items = list(adj_map.items())
