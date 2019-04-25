@@ -22,6 +22,7 @@ model = Magnitude(
 adj_cache_path = os.path.join(data_path, 'adj_cache.pickle')
 adj_list_path  = os.path.join(data_path, 'adjectives.txt')
 
+model.query("meow") # warm up the model
 if SKIP_CACHING:
     print('Skipping adjective cache. Adjectives will be disabled.')
 elif os.path.exists(adj_cache_path):
