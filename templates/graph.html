@@ -283,7 +283,7 @@
         graph_button.innerHTML = '<i class="fa fa-refresh fa-spin"></i> Processing...';
         var text = input_box.value;
         var query_labels = text.split(/\r?\n/).join(',');
-        fetch(`/graph_api?labels=${query_labels}&n_components=4`)
+        fetch(`/api/graph?labels=${query_labels}&n_components=4`)
           .then(function(response) {
             occupied = false;
             graph_button.innerHTML = 'Graph';

@@ -22,7 +22,7 @@ model = Magnitude(
 adj_cache_path = os.path.join(data_path, 'adj_cache.pickle')
 adj_list_path  = os.path.join(data_path, 'adjectives.txt')
 
-model.query("meow") # warm up the model
+model.query("warm") # warm up the model
 if SKIP_CACHING:
     print('Skipping adjective cache. Adjectives will be disabled.')
 elif os.path.exists(adj_cache_path):
@@ -45,6 +45,149 @@ def reformat(s):
 
 def index(request):
     return render(request, 'index.html')
+
+
+def safe_similarity(model, a, b):
+    if a not in model:
+        return '"{}" not found.'.format(a)
+    if b not in model:
+        return '"{}" not found.'.format(b)
+    return str(round(model.similarity(a, b), 8))
+
+def analogy_api(request):
+    """
+    Analogy API endpoint
+    Params:
+        pos1 - The first word in the complete analogy
+        pos2 - The second word in the complete analogy
+        neg1 - The first word in the incomplete analogy
+    Returns:
+        JSON with format:
+        {
+            'success': bool // Whether or the query succeeded
+            'message': str  // Error message if success is false
+            'result':  str  // The word that most closely fits the analogy 
+        }
+    """
+    pos1 = reformat(request.GET.get('pos1', None))
+    pos2 = reformat(request.GET.get('pos2', None))
+    neg1 = reformat(request.GET.get('neg1', None))
+    n    = int(request.GET.get('n', 1))
+    if not all([pos1, pos2, neg1]):
+        return JsonResponse({
+            'success': False,
+            'message': 'Missing input'
+        })
+    neg2 = model.most_similar_cosmul(
+        positive=[pos1, pos2],
+        negative=[neg1],
+        topn=n
+    )[0][0]
+    result = {
+        'success': True,
+        'result': neg2
+    }
+    return JsonResponse(result)
+
+def most_similar_api(request):
+    raw_target = request.GET.get('target', None)
+    target = reformat(raw_target)
+    topn   = int(request.GET.get('topn', 10))
+    if not target:
+        return JsonResponse({
+            'success': False,
+            'message': 'Missing input'    
+        })
+    if target not in model:
+        return JsonResponse({
+            'success': False,
+            'message': 'Target "{}" not found in the model'.format(raw_target)
+        })
+    result = []
+    for word, sim in model.most_similar(target, topn=topn):
+        result.append({
+            'word': word,
+            'similarity': float(sim)
+        })
+
+    return JsonResponse({
+        'success': True,
+        'result': result
+    })
+
+def cosine_similarity_api(request):
+    list1 = list(map(reformat, request.GET.get('list1', '').split(',')))
+    list2 = list(map(reformat, request.GET.get('list2', '').split(',')))
+    if len(list1) != len(list2):
+        return JsonResponse({
+            'success': False,
+            'message': 'Inputs are different lengths'
+        })
+    if not (list1 or list2):
+        return JsonResponse({
+            'success': False,
+            'message': 'Missing input'
+        })
+    result = [
+        {'word1': a, 'word2': b, 'similarity': safe_similarity(model, a, b)} 
+        for a, b in zip(list1, list2)
+    ]
+    return JsonResponse({
+        'success': True,
+        'result': result
+    })
+    
+def adjectives_api(request):
+    raw_target = request.GET.get('target', None)
+    target = reformat(raw_target)
+    n      = int(request.GET.get('n', 10))
+    if not target:
+        return JsonResponse({
+            'success': False,
+            'message': 'Please input a target'
+        })
+    if target not in model:
+        return JsonResponse({
+            'success': False,
+            'message': 'Target "{}" not found in the model'.format(raw_target)
+        })
+    v = model.query(target)
+    result = [
+        {'word': word, 'similarity': similarity}
+        for word, similarity in get_descriptive_adjectives(v, n=n)
+    ]
+    return JsonResponse({
+        'success': True,
+        'result': result
+    })
+    
+def vectors_api(request):
+    raw_targets = request.GET.get('targets', '')
+    if not raw_targets:
+        return JsonResponse({
+            'success': False,
+            'message': 'Missing input'
+        })
+    rows = []
+    for raw in raw_targets.split(','):
+        row = OrderedDict()
+        row['word'] = raw
+        target = reformat(raw)
+        if target not in model:
+            row['found'] = False
+            for i in range(300):
+                row[i] = 0
+        else:
+            row['found'] = True
+            for i, val in enumerate(model.query(target)):
+                row[i] = float(val)
+        rows.append(row)
+    return JsonResponse({
+        'success': True,
+        'result': rows
+    })
+        
+
 
 def reasoning(request):
     # retrieves input information from frontend
@@ -103,7 +246,7 @@ def reasoning(request):
 
 def get_descriptive_adjectives(v, n=30, select=lambda l,n: l[:n]):
     adj_list = list(map(
-            lambda i: (i[0], cosine_similarity([i[1]], [v])[0][0]),
+            lambda i: [i[0], float(cosine_similarity([i[1]], [v])[0][0])],
             adj_map.items()
     )) # Convert adj_map into list of tuples of (Adjective str, Cosine similarity)
     adj_list.sort(
