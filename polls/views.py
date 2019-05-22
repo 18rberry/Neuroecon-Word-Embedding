@@ -14,17 +14,7 @@ import os
 import faiss
 
 print('Initializing Faiss index')
-faiss_index = faiss.IndexFlatL2(300) # plain 300D quantizer
-# faiss_index = faiss.IndexIVFPQ(
-#     quantizer,
-#     300, # 300D word embeddings
-#     1, # Use 100 cells in the top-level quantizer
-#       300, # Use 4 subvectors (length of 75)
-#       8, # 8 bits to encode clusters
-# )
-# faiss_index.nprobe = 1 # Probe the top 10 (out of 100) top-level cells
-
-# Descriptive Adjectives caching
+faiss_index = faiss.IndexFlatL2(300) # Plain 300D index
 SKIP_CACHING = False
 data_path = os.path.join('.', 'data')
 vector_path = os.path.join(data_path, 'vectors')
@@ -44,9 +34,6 @@ elif os.path.exists(adj_cache_path):
         adj_map = pickle.load(f)
     adj_list = list(adj_map)
     adj_vecs = np.array([adj_map[adj] for adj in adj_list]).astype("float32")
-    # reverse_adj_list = {adj_list[i]: i for i in range(len(adj_list))}
-    print("Training Faiss index")
-    # faiss_index.train(adj_vecs)
     faiss_index.add(adj_vecs)
 else:
     print('Caching adjectives. This will take a few seconds...')
@@ -178,7 +165,7 @@ def adjectives_api(request):
     ]
     return JsonResponse({
         'success': True,
-        'result': result
+        'result': result,
     })
     
 def vectors_api(request):
@@ -206,8 +193,6 @@ def vectors_api(request):
         'success': True,
         'result': rows
     })
-        
-
 
 def reasoning(request):
     # retrieves input information from frontend
@@ -264,15 +249,19 @@ def reasoning(request):
     # If regular page load, just pass plain defaults
     return render(request, 'reasoning.html', locals())
 
-def get_descriptive_adjectives(v, n=30, select=lambda l,n: l[:n]):
-    D, I = faiss_index.search(np.array([v]).astype("float32"), n)
-    D, W = map(float, D[0]), map(lambda i: adj_list[int(i)], I[0])
+def get_descriptive_adjectives(v, n=30, two_sided=False):
+    if two_sided:
+        n //= 2
+    D, I = faiss_index.search(np.array([v]).astype('float32'), n)
+    D, W = list(map(float, D[0])), list(map(lambda i: adj_list[int(i)], I[0]))
+    if two_sided:
+        D2, I2 = faiss_index.search(-np.array([v]).astype('float32'), n)
+        D2, W2 = map(float, D2[0]), map(lambda i: adj_list[int(i)], I2[0])
+        W.append('------')
+        W.extend(W2)
+        D.append(0)
+        D.extend(D2)
     return zip(W, D)
-
-def axis_select(adj_list, n):
-    top = adj_list[:n//2]
-    bot = list(reversed(adj_list[-n//2:]))
-    return top + [('-'*10,0)] + bot
 
 def to_vector_dict(labels):
     result = OrderedDict()
@@ -315,7 +304,7 @@ def graph_api(request):
     for axis in pca.components_:
         label_dict = OrderedDict()
         for word, sim in get_descriptive_adjectives(
-            axis, select=axis_select
+            axis, two_sided = True
         ):
             label_dict[word] = sim
         axis_labels.append(label_dict)
