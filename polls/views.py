@@ -11,6 +11,18 @@ import numpy as np
 import json
 import pickle
 import os
+import faiss
+
+print('Initializing Faiss index')
+faiss_index = faiss.IndexFlatL2(300) # plain 300D quantizer
+# faiss_index = faiss.IndexIVFPQ(
+#     quantizer,
+#     300, # 300D word embeddings
+#     1, # Use 100 cells in the top-level quantizer
+#       300, # Use 4 subvectors (length of 75)
+#       8, # 8 bits to encode clusters
+# )
+# faiss_index.nprobe = 1 # Probe the top 10 (out of 100) top-level cells
 
 # Descriptive Adjectives caching
 SKIP_CACHING = False
@@ -22,12 +34,20 @@ model = Magnitude(
 adj_cache_path = os.path.join(data_path, 'adj_cache.pickle')
 adj_list_path  = os.path.join(data_path, 'adjectives.txt')
 
-model.query("warm") # warm up the model
+print("Starting warm-up")
+model.most_similar_cosmul(positive=['cat', 'dog'], negative=['fish']) # warm up model
+print("Ending warm-up")
 if SKIP_CACHING:
     print('Skipping adjective cache. Adjectives will be disabled.')
 elif os.path.exists(adj_cache_path):
     with open(adj_cache_path, 'rb') as f:
-        adj_map = pickle.load(f) 
+        adj_map = pickle.load(f)
+    adj_list = list(adj_map)
+    adj_vecs = np.array([adj_map[adj] for adj in adj_list]).astype("float32")
+    # reverse_adj_list = {adj_list[i]: i for i in range(len(adj_list))}
+    print("Training Faiss index")
+    # faiss_index.train(adj_vecs)
+    faiss_index.add(adj_vecs)
 else:
     print('Caching adjectives. This will take a few seconds...')
     with open(adj_list_path, 'rt') as f:
@@ -245,15 +265,9 @@ def reasoning(request):
     return render(request, 'reasoning.html', locals())
 
 def get_descriptive_adjectives(v, n=30, select=lambda l,n: l[:n]):
-    adj_list = list(map(
-            lambda i: [i[0], float(cosine_similarity([i[1]], [v])[0][0])],
-            adj_map.items()
-    )) # Convert adj_map into list of tuples of (Adjective str, Cosine similarity)
-    adj_list.sort(
-        key = lambda a: a[1],
-        reverse = True
-    ) # Sort by cosine similarity
-    return select(adj_list, n)
+    D, I = faiss_index.search(np.array([v]).astype("float32"), n)
+    D, W = map(float, D[0]), map(lambda i: adj_list[int(i)], I[0])
+    return zip(W, D)
 
 def axis_select(adj_list, n):
     top = adj_list[:n//2]
