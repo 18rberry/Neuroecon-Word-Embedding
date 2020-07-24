@@ -17,9 +17,8 @@ Django will look for this file in the project root as ``GoogleNews-vectors-negat
 
 # TODO
 - Fix the graph animations on axis change to have silky smooth animations~
-- Make a new logo for the site (it looks like the current one is for some Norwegian DJ lol)
-- Add ability to download data (CW will probably handle)
+- Add ability to download data
 - Separate API endpoint for labeling PCA components from the graphing part (Labeling the PCA components is generally pretty time consuming, people who just want to look at the graph might not care)
 - Add support for multiple models (probably more .magnitude files so we can reuse existing code)
 - Fix up the front page with less filler text
-- tSNE stuff
+- tSNE support
